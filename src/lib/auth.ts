@@ -17,4 +17,14 @@ export const auth = betterAuth({
       defaultLocale: "fa-IR",
     }),
   ],
+  trustedOrigins: [
+    process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    "http://192.168.100.5:3000",
+  ],
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+    useSecureCookies: false, // Set to false for local development over HTTP
+  },
 });

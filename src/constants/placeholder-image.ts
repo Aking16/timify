@@ -1,1 +1,1 @@
-export const placeholderImage = "/images/missing-file.svg";
+export const placeholderImage = "/images/placeholder.svg";
