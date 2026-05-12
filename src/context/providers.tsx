@@ -1,5 +1,7 @@
 import { DirectionProvider } from "@/components/ui/direction";
+import { Toaster } from "@/components/ui/sonner";
 import React from "react";
+import { ThemeProvider } from "./theme-provider";
 
 export default function Providers({
   children,
@@ -8,7 +10,10 @@ export default function Providers({
 }>) {
   return (
     <DirectionProvider dir="rtl" direction="rtl">
-      {children}
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        {children}
+        <Toaster />
+      </ThemeProvider>
     </DirectionProvider>
   );
 }
