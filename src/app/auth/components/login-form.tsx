@@ -7,6 +7,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { defaultRoutes } from "@/constants/routes";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -31,7 +32,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       {
         email: values.email,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: defaultRoutes.authRedirectPage,
       },
       {
         onRequest: () => {
@@ -40,7 +41,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         onSuccess: () => {
           toast.dismiss(loadingToastId);
           toast.success("با موفقیت وارد شدید!");
-          redirect("/");
+          redirect(defaultRoutes.authRedirectPage);
         },
         onError: (ctx) => {
           toast.dismiss(loadingToastId);

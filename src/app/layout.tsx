@@ -1,8 +1,8 @@
 import { iranSansX } from "@/constants/fonts";
+import Providers from "@/context/providers";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/context/providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,6 +19,7 @@ export default function RootLayout({
       dir="rtl"
       lang="fa-IR"
       className={cn("h-full", "antialiased", iranSansX.variable, "font-iransanx")}
+      suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
