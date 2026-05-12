@@ -1,9 +1,20 @@
-import { SidebarDemo } from "@/components/sidebar-example";
+import { SidebarLayout } from "@/components/layout/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <SidebarDemo>{children}</SidebarDemo>;
+  return (
+    <SidebarLayout>
+      <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger />
+          <span>داشبورد</span>
+        </div>
+      </header>
+      {children}
+    </SidebarLayout>
+  );
 }

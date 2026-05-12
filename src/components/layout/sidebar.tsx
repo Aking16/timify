@@ -26,6 +26,7 @@ import {
   TimerIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { ProjectSelector } from "./project-selector";
 
 const navItems = [
   {
@@ -49,15 +50,9 @@ export function AppSidebar() {
   return (
     <Sidebar variant="inset" collapsible="icon" side="right" dir="rtl">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" tooltip="Timify">
-              <HugeiconsIcon icon={TimerIcon} />
-              <span>Timify</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <ProjectSelector />
       </SidebarHeader>
+      <SidebarSeparator />
       <SidebarContent>
         {navItems.map((group) => (
           <SidebarGroup key={group.label}>
@@ -104,7 +99,7 @@ export function AppSidebar() {
   );
 }
 
-export function SidebarDemo({
+export function SidebarLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

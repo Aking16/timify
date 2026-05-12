@@ -1,24 +1,19 @@
 {
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ],
+  "plugins": ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
   "importOrder": [
     "^react$",
+    "",
     "<THIRD_PARTY_MODULES>",
+    "",
     "^@/components/(.*)$",
+    "",
     "^@/lib/(.*)$",
+    "",
     "^@/hooks/(.*)$",
+    "",
     "^[./]"
   ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "tailwindFunctions": [
-    "clsx",
-    "cn",
-    "cva",
-    "twMerge"
-  ],
+  "tailwindFunctions": ["clsx", "cn", "cva", "twMerge"],
   "printWidth": 100,
   "tabWidth": 2,
   "useTabs": false,
