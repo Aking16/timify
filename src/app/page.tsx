@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <HugeiconsIcon icon={UserCircle02Icon} />
-      <Button>Test </Button>
+      <Button>Test 23223</Button>
     </div>
   );
 }
