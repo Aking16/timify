@@ -1,8 +1,9 @@
 import { useActionState, useState } from "react";
 
+import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
 import { editTimeEntry } from "@/actions/time-entries/edit-time.entry";
 import { timeEntries } from "@/db/schema";
-import { Edit02Icon } from "@hugeicons/core-free-icons";
+import { Edit02Icon, Trash } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import StatusMessage from "@/components/cards/status-message";
@@ -95,6 +96,17 @@ export default function EntryCardDialog({
         </form>
         <StatusMessage status={state?.success ? "success" : "error"} message={state?.message} />
         <DialogFooter>
+          <Button
+            type="button"
+            variant="destructive"
+            className="me-auto"
+            onClick={() => {
+              deleteTimeEntry(id);
+            }}
+          >
+            <HugeiconsIcon icon={Trash} />
+            حذف
+          </Button>
           <Button
             type="button"
             variant="outline"
