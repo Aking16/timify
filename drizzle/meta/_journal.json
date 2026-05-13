@@ -15,6 +15,20 @@
       "when": 1778655451881,
       "tag": "0001_even_khan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1778658347139,
+      "tag": "0002_lovely_mad_thinker",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1778658931236,
+      "tag": "0003_petite_invaders",
+      "breakpoints": true
     }
   ]
 }

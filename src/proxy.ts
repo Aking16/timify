@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+
 import { auth } from "@/lib/auth";
 
 export async function proxy(request: NextRequest) {
@@ -15,5 +16,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/project:path*"],
 };

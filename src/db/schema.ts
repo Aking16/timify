@@ -110,6 +110,7 @@ export const timeEntries = sqliteTable("time_entries", {
   projectId: text("project_id").references(() => projects.id, {
     onDelete: "set null",
   }),
+  title: text("title"),
   description: text("description"),
   startTime: integer("start_time", { mode: "timestamp" }).$defaultFn(() => new Date()),
   endTime: integer("end_time", { mode: "timestamp" }),

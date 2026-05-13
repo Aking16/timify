@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { timeEntries } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 
@@ -43,18 +44,45 @@ export async function createTimeEntry(
     };
   }
 
+  const projectID = validatedFields.data.projectID;
+
   try {
-    // Stop all running time entries for the current user
-    await db
-      .update(timeEntries)
-      .set({ isRunning: false, endTime: new Date() })
+    // Get all running time entries for the current user to calculate their durations
+    const runningEntries = await db
+      .select()
+      .from(timeEntries)
       .where(and(eq(timeEntries.userId, session.user.id), eq(timeEntries.isRunning, true)));
+
+    // Stop all running time entries and calculate their durations
+    const now = new Date();
+    for (const entry of runningEntries) {
+      if (!entry.startTime) {
+        console.error(`Time entry ${entry.id} has no startTime`);
+        continue; // Skip this entry or handle as needed
+      }
+
+      const startTime = new Date(entry.startTime);
+      const durationInSeconds = Math.floor((now.getTime() - startTime.getTime()) / 1000);
+
+      await db
+        .update(timeEntries)
+        .set({
+          isRunning: false,
+          endTime: now,
+          duration: durationInSeconds,
+          updatedAt: now,
+        })
+        .where(eq(timeEntries.id, entry.id));
+    }
 
     await db.insert(timeEntries).values({
       userId: session.user.id,
-      projectId: validatedFields.data.projectID,
+      projectId: projectID,
+      title: "تسک جدید",
       description: "تسک جدید",
     });
+
+    revalidatePath("/project/");
 
     return {
       success: true,
