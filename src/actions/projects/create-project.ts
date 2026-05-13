@@ -22,7 +22,7 @@ export type CreateProjectState = {
 } | null;
 
 export async function createProject(
-  prevState: CreateProjectState,
+  _prevState: CreateProjectState,
   formData: FormData
 ): Promise<CreateProjectState> {
   const session = await auth.api.getSession({
