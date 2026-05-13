@@ -111,10 +111,10 @@ export const timeEntries = sqliteTable("time_entries", {
     onDelete: "set null",
   }),
   description: text("description"),
-  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  startTime: integer("start_time", { mode: "timestamp" }).$defaultFn(() => new Date()),
   endTime: integer("end_time", { mode: "timestamp" }),
   duration: integer("duration"), // in seconds, calculated field
-  isRunning: integer("is_running", { mode: "boolean" }).default(false),
+  isRunning: integer("is_running", { mode: "boolean" }).default(true),
   billable: integer("billable", { mode: "boolean" }).default(false),
   hourlyRate: real("hourly_rate"), // optional, can override project rate
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),

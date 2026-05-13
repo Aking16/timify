@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { ProjectSelector } from "./project-selector";
+import { StartTimer } from "./start-timer";
 
 const navItems = [
   {
@@ -56,6 +57,7 @@ export function AppSidebar() {
         <ProjectSelector />
       </SidebarHeader>
       <SidebarSeparator />
+      <StartTimer />
       <SidebarContent>
         {navItems.map((group) => (
           <SidebarGroup key={group.label}>
