@@ -45,7 +45,7 @@ const navItems = [
     items: [
       { title: "همه پروژه‌ها", icon: FolderIcon, href: "#", badge: null },
       { title: "تقویم", icon: CalendarIcon, href: "#", badge: null },
-      { title: "گزارش‌ها", icon: TimerIcon, href: "#", badge: null },
+      { title: "گزارش‌ها", icon: TimerIcon, href: "/reports", badge: null },
     ],
   },
 ];

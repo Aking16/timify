@@ -76,7 +76,7 @@ export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect)
       <CardContent>
         <p>{props.description}</p>
       </CardContent>
-      <CardFooter className="block space-y-2">
+      <CardFooter className="block space-y-2 mt-auto">
         <p>تگ ها</p>
         <Badge>Test</Badge>
       </CardFooter>
