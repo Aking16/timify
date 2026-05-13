@@ -1,4 +1,19 @@
+"use client";
+
+import { useEffect } from "react";
+
+import { getActiveProject } from "@/data/get-active-project";
+import { useRouter } from "nextjs-toploader/app";
+
 export default function Home() {
+  const router = useRouter();
+
+  const activeProject = getActiveProject();
+
+  useEffect(() => {
+    if (activeProject.id) router.push(`/project/${activeProject.id}`);
+  }, [activeProject.id, router]);
+
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4">

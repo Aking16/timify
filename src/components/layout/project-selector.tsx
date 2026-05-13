@@ -4,6 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 
 import { createProject } from "@/actions/projects/create-project";
 import { getProjects } from "@/actions/projects/get-projects";
+import { getActiveProject } from "@/data/get-active-project";
 import {
   CarouselVerticalIcon,
   ChevronsDownUpIcon,
@@ -11,12 +12,14 @@ import {
   TickIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter } from "nextjs-toploader/app";
 import useSWR from "swr";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -35,9 +38,12 @@ import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 
 export function ProjectSelector() {
+  const router = useRouter();
+
   const { data: projects, isLoading, error, mutate } = useSWR("all-projects", getProjects);
-  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const activeProject = getActiveProject();
 
   const [state, formAction, isPending] = useActionState(createProject, null);
 
@@ -45,12 +51,14 @@ export function ProjectSelector() {
     if (state?.success && state.project) {
       // Refresh the projects list
       mutate();
-      // Auto-select the new project
-      setSelectedProject({ id: state.project.id, name: state.project.name });
-      // Close modal
-      setIsModalOpen(false);
     }
   }, [state, mutate]);
+
+  function handleSelectProject(id: string, name: string) {
+    localStorage.setItem("active-project", JSON.stringify({ id, name }));
+
+    router.push(`/project/${id}`);
+  }
 
   if (error) return <p>خطا در دریافت پروژه</p>;
   if (isLoading) return <Skeleton className="h-12 w-full" />;
@@ -69,8 +77,8 @@ export function ProjectSelector() {
                   <HugeiconsIcon icon={CarouselVerticalIcon} />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Documentation</span>
-                  <span className="">{selectedProject?.name}</span>
+                  <span className="font-medium">پروژه</span>
+                  <span className="">{activeProject?.name ?? ""}</span>
                 </div>
                 <HugeiconsIcon icon={ChevronsDownUpIcon} className="ms-auto" />
               </SidebarMenuButton>
@@ -79,17 +87,18 @@ export function ProjectSelector() {
               {projects?.map((item) => (
                 <DropdownMenuItem
                   key={`projects-selection-${item.id}`}
-                  onSelect={() => setSelectedProject({ id: item.id, name: item.name })}
+                  onSelect={() => handleSelectProject(item.id, item.name)}
                 >
                   {item.name}{" "}
-                  {item.id === selectedProject?.id && (
+                  {item.id === activeProject?.id && (
                     <HugeiconsIcon icon={TickIcon} className="ms-auto" />
                   )}
                 </DropdownMenuItem>
               ))}
+              <DropdownMenuSeparator />
               <DropdownMenuItem key="projects-selection-new" onSelect={() => setIsModalOpen(true)}>
                 <HugeiconsIcon icon={PlusSignIcon} className="ml-2 h-4 w-4" />
-                Create New Project
+                ساخت پروژه جدید
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

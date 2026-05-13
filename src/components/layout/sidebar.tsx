@@ -1,6 +1,18 @@
 "use client";
 
 import {
+  CalendarIcon,
+  ClockIcon,
+  FolderIcon,
+  HomeIcon,
+  PlusSignCircleIcon,
+  TagIcon,
+  TimerIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -16,23 +28,14 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import {
-  CalendarIcon,
-  ClockIcon,
-  FolderIcon,
-  HomeIcon,
-  PlusSignCircleIcon,
-  TagIcon,
-  TimerIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+
 import { ProjectSelector } from "./project-selector";
 
 const navItems = [
   {
     label: "عمومی",
     items: [
-      { title: "داشبورد", icon: HomeIcon, href: "#", badge: null },
+      { title: "داشبورد", icon: HomeIcon, href: "/", badge: null },
       { title: "زمان‌ها", icon: ClockIcon, href: "#", badge: "12" },
     ],
   },
@@ -62,10 +65,10 @@ export function AppSidebar() {
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
-                      <a href={item.href}>
+                      <Link href={item.href}>
                         <HugeiconsIcon icon={item.icon} data-icon="inline-start" />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                     {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                   </SidebarMenuItem>
