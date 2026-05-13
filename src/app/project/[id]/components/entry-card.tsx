@@ -23,15 +23,14 @@ import {
 
 import { useRealtimeDuration } from "@/hooks/useRealtimeDuration";
 
-export default function EntryCard({
-  id,
-  description,
-  title,
-  startTime,
-  duration,
-  isRunning,
-}: typeof timeEntries.$inferSelect) {
-  const currentDuration = useRealtimeDuration(startTime, isRunning ?? false, duration);
+import EntryCardDialog from "./entry-card-dialog";
+
+export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect) {
+  const currentDuration = useRealtimeDuration(
+    props.startTime,
+    props.isRunning ?? false,
+    props.duration
+  );
 
   const [_state, formAction, isPending] = useActionState(stopTimeEntry, null);
 
@@ -45,7 +44,7 @@ export default function EntryCard({
       return;
     }
 
-    formData.set("id", id);
+    formData.set("id", props.id);
 
     startTransition(() => {
       formAction(formData);
@@ -55,26 +54,27 @@ export default function EntryCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction>
+        <CardTitle>{props.title}</CardTitle>
+        <CardDescription>{props.description}</CardDescription>
+        <CardAction className="flex items-center gap-1">
           <Button
             variant="outline"
             size="sm"
-            disabled={isPending || !isRunning}
+            disabled={isPending || !props.isRunning}
             onClick={handleStartClick}
           >
             {currentDuration}
             <HugeiconsIcon
-              icon={isRunning ? PlayIcon : StopIcon}
-              fill={isRunning ? "green" : "red"}
-              color={isRunning ? "green" : "red"}
+              icon={props.isRunning ? PlayIcon : StopIcon}
+              fill={props.isRunning ? "green" : "red"}
+              color={props.isRunning ? "green" : "red"}
             />
           </Button>
+          <EntryCardDialog {...props} />
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>{description}</p>
+        <p>{props.description}</p>
       </CardContent>
       <CardFooter className="block space-y-2">
         <p>تگ ها</p>
