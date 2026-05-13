@@ -1,0 +1,43 @@
+import { useState } from "react";
+
+import { PlusSignCircleIcon, TagIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+
+import CreateProjectDialog from "../layout/create-project-dialog";
+
+export default function SidebarSecondaryItems() {
+  const [isOpen, setOpen] = useState(false);
+
+  return (
+    <>
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="افزودن پروژه" onClick={() => setOpen((prev) => !prev)}>
+                <HugeiconsIcon icon={PlusSignCircleIcon} data-icon="inline-start" />
+                <span>افزودن پروژه</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="برچسب‌ها">
+                <HugeiconsIcon icon={TagIcon} data-icon="inline-start" />
+                <span>برچسب‌ها</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <CreateProjectDialog isOpen={isOpen} setOpen={setOpen} />
+    </>
+  );
+}

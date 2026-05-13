@@ -1,7 +1,7 @@
 import { getDailyHours } from "@/actions/reports/get-daily-hours";
 
 import { DailyHoursBarChart } from "@/components/charts/daily-hours-bar-chart";
-import { SidebarLayout } from "@/components/layout/sidebar";
+import { SidebarLayout } from "@/components/sidebar/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 

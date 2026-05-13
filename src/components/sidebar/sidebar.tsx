@@ -1,16 +1,15 @@
 "use client";
 
+import { getProjects } from "@/actions/projects/get-projects";
+import { getTimeEntries } from "@/actions/time-entries/get-time-entry";
 import {
   CalendarIcon,
   ClockIcon,
   FolderIcon,
   HomeIcon,
-  PlusSignCircleIcon,
-  TagIcon,
   TimerIcon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import Link from "next/link";
+import useSWR from "swr";
 
 import {
   Sidebar,
@@ -21,15 +20,14 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 import { ProjectSelector } from "./project-selector";
+import SidebarItem from "./sidebar-item";
+import SidebarSecondaryItems from "./sidebar-secondary-items";
 import { StartTimer } from "./start-timer";
 
 const navItems = [
@@ -37,13 +35,13 @@ const navItems = [
     label: "عمومی",
     items: [
       { title: "داشبورد", icon: HomeIcon, href: "/", badge: null },
-      { title: "زمان‌ها", icon: ClockIcon, href: "#", badge: "12" },
+      { title: "زمان‌ها", icon: ClockIcon, href: "#", badge: null },
     ],
   },
   {
     label: "پروژه‌ها",
     items: [
-      { title: "همه پروژه‌ها", icon: FolderIcon, href: "#", badge: null },
+      { title: "همه پروژه‌ها", icon: FolderIcon, href: "/projects", badge: null },
       { title: "تقویم", icon: CalendarIcon, href: "#", badge: null },
       { title: "گزارش‌ها", icon: TimerIcon, href: "/reports", badge: null },
     ],
@@ -51,10 +49,13 @@ const navItems = [
 ];
 
 export function AppSidebar() {
+  const projects = useSWR("all-projects", getProjects);
+  const timeEntries = useSWR("all-time-entries", getTimeEntries);
+
   return (
     <Sidebar variant="inset" collapsible="icon" side="right" dir="rtl">
       <SidebarHeader>
-        <ProjectSelector />
+        <ProjectSelector {...projects} />
       </SidebarHeader>
       <SidebarSeparator />
       <StartTimer />
@@ -65,39 +66,19 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
-                      <Link href={item.href}>
-                        <HugeiconsIcon icon={item.icon} data-icon="inline-start" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                    {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
-                  </SidebarMenuItem>
+                  <SidebarItem
+                    key={`sidebar-item-menu-${item.href}`}
+                    {...item}
+                    projectsData={projects}
+                    timeEntriesData={timeEntries}
+                  />
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
         <SidebarSeparator />
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="افزودن پروژه">
-                  <HugeiconsIcon icon={PlusSignCircleIcon} data-icon="inline-start" />
-                  <span>افزودن پروژه</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="برچسب‌ها">
-                  <HugeiconsIcon icon={TagIcon} data-icon="inline-start" />
-                  <span>برچسب‌ها</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <SidebarSecondaryItems />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

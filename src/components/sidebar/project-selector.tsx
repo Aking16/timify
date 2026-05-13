@@ -1,0 +1,94 @@
+"use client";
+
+import { useState } from "react";
+
+import { getActiveProject } from "@/data/get-active-project";
+import { projects } from "@/db/schema";
+import {
+  CarouselVerticalIcon,
+  ChevronsDownUpIcon,
+  PlusSignIcon,
+  TickIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter } from "nextjs-toploader/app";
+import { SWRResponse } from "swr";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+
+import CreateProjectDialog from "../layout/create-project-dialog";
+import { Skeleton } from "../ui/skeleton";
+
+export function ProjectSelector({
+  data,
+  error,
+  isLoading,
+  mutate,
+}: SWRResponse<(typeof projects.$inferSelect)[]>) {
+  const router = useRouter();
+
+  const [isOpen, setOpen] = useState(false);
+
+  const activeProject = getActiveProject();
+
+  function handleSelectProject(id: string, name: string) {
+    localStorage.setItem("active-project", JSON.stringify({ id, name }));
+
+    router.push(`/project/${id}`);
+  }
+
+  if (error) return <p>خطا در دریافت پروژه</p>;
+  if (isLoading) return <Skeleton className="h-12 w-full" />;
+
+  return (
+    <>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <HugeiconsIcon icon={CarouselVerticalIcon} />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-medium">پروژه</span>
+                  <span className="">{activeProject?.name ?? ""}</span>
+                </div>
+                <HugeiconsIcon icon={ChevronsDownUpIcon} className="ms-auto" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)" align="start">
+              {data?.map((item) => (
+                <DropdownMenuItem
+                  key={`projects-selection-${item.id}`}
+                  onSelect={() => handleSelectProject(item.id, item.name)}
+                >
+                  {item.name}{" "}
+                  {item.id === activeProject?.id && (
+                    <HugeiconsIcon icon={TickIcon} className="ms-auto" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem key="projects-selection-new" onSelect={() => setOpen(true)}>
+                <HugeiconsIcon icon={PlusSignIcon} className="ml-2 h-4 w-4" />
+                ساخت پروژه جدید
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      </SidebarMenu>
+      <CreateProjectDialog isOpen={isOpen} setOpen={setOpen} mutate={mutate} />
+    </>
+  );
+}

@@ -1,4 +1,4 @@
-import { SidebarLayout } from "@/components/layout/sidebar";
+import { SidebarLayout } from "@/components/sidebar/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Layout({
