@@ -1,8 +1,8 @@
 "use client";
 
 import { DailyHoursData } from "@/actions/reports/get-daily-hours";
-import { format } from "date-fns";
-import { faIR } from "date-fns/locale";
+import { format } from "date-fns-jalali";
+import { faIR } from "date-fns-jalali/locale";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -25,7 +25,7 @@ const chartConfig: ChartConfig = {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return format(date, "dd MMM", { locale: faIR });
+  return format(date, "dd MMMM", { locale: faIR });
 }
 
 export function DailyHoursBarChart({ data }: DailyHoursBarChartProps) {

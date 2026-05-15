@@ -9,27 +9,19 @@ export interface DailyHoursData {
   hours: number;
 }
 
-export async function getDailyHours(
-  startDate?: Date,
-  endDate?: Date
-): Promise<DailyHoursData[]> {
+export async function getDailyHours(startDate?: Date, endDate?: Date): Promise<DailyHoursData[]> {
   const now = new Date();
   const defaultStartDate = new Date(now);
   defaultStartDate.setDate(now.getDate() - 30); // Last 30 days by default
 
-  const start = startDate || defaultStartDate;
-  const end = endDate || now;
+  const start = startDate ?? defaultStartDate;
+  const end = endDate ?? now;
 
   // Get all time entries within the date range
   const entries = await db
     .select()
     .from(timeEntries)
-    .where(
-      and(
-        gte(timeEntries.startTime, start),
-        lte(timeEntries.startTime, end)
-      )
-    );
+    .where(and(gte(timeEntries.startTime, start), lte(timeEntries.startTime, end)));
 
   // Group by date and calculate total hours
   const dailyMap = new Map<string, number>();
@@ -58,7 +50,7 @@ export async function getDailyHours(
     }
 
     // Add to the daily total
-    const current = dailyMap.get(dateStr) || 0;
+    const current = dailyMap.get(dateStr) ?? 0;
     dailyMap.set(dateStr, current + seconds);
   }
 
