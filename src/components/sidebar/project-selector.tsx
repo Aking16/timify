@@ -11,6 +11,7 @@ import {
   TickIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 import { SWRResponse } from "swr";
 
@@ -33,6 +34,7 @@ export function ProjectSelector({
   mutate,
 }: SWRResponse<(typeof projects.$inferSelect)[]>) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isOpen, setOpen] = useState(false);
 
@@ -41,7 +43,20 @@ export function ProjectSelector({
   function handleSelectProject(id: string, name: string) {
     localStorage.setItem("active-project", JSON.stringify({ id, name }));
 
-    router.push(`/project/${id}`);
+    // Check if we're on a project route (matches /project/:id/* pattern)
+    const projectRoutePattern = /^\/project\/([^\/]+)(\/.*)?$/;
+    const match = pathname.match(projectRoutePattern);
+
+    if (match) {
+      // Replace the project ID while keeping the rest of the path
+      const restOfPath = match[2] ?? "";
+      const newPath = `/project/${id}${restOfPath}`;
+
+      router.push(newPath);
+    } else {
+      // Fallback to default behavior if not on a project route
+      router.push(`/project/${id}`);
+    }
   }
 
   if (error) return <p>خطا در دریافت پروژه</p>;
