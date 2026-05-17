@@ -3,11 +3,14 @@ import { useActionState, useState } from "react";
 import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
 import { editTimeEntry } from "@/actions/time-entries/edit-time.entry";
 import { timeEntries } from "@/db/schema";
-import { Edit02Icon, Trash } from "@hugeicons/core-free-icons";
+import { faIR } from "@daypicker/persian";
+import { ChevronDown, Edit02Icon, Trash } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { format } from "date-fns-jalali";
 
 import StatusMessage from "@/components/cards/status-message";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function EntryCardDialog({
   id,
@@ -28,6 +32,8 @@ export default function EntryCardDialog({
   endTime,
 }: typeof timeEntries.$inferSelect) {
   const [isOpen, setOpen] = useState(false);
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
   const [state, formAction, isPending] = useActionState(editTimeEntry, null);
 
@@ -61,7 +67,7 @@ export default function EntryCardDialog({
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="description">توضیحات </FieldLabel>
+              <FieldLabel htmlFor="description">توضیحات</FieldLabel>
               <Input
                 id="description"
                 name="description"
@@ -74,10 +80,38 @@ export default function EntryCardDialog({
           </FieldGroup>
           <FieldGroup className="grid grid-cols-2">
             <Field>
+              <FieldLabel htmlFor="date-picker-optional">زمان شروع</FieldLabel>
+              <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="date-picker-optional"
+                    className="w-32 justify-between font-normal"
+                  >
+                    {startTime ? format(startTime, "P") : "تاریخ شروع"}
+                    <HugeiconsIcon icon={ChevronDown} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    captionLayout="dropdown"
+                    locale={faIR}
+                    defaultMonth={startTime ?? undefined}
+                    onSelect={(date) => {
+                      setStartDate(date);
+                      setOpen(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
+            <Field>
               <FieldLabel htmlFor="start-time">زمان شروع</FieldLabel>
               <Input
                 id="start-time"
-                type="datetime-local"
+                type="time"
                 name="startTime"
                 defaultValue={startTime?.toISOString().slice(0, 16)}
                 required

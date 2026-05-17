@@ -2,14 +2,18 @@
 
 import { db } from "@/db";
 import { timeEntries } from "@/db/schema";
-import { and, gte, lte } from "drizzle-orm";
+import { and, eq, gte, lte } from "drizzle-orm";
 
 export interface DailyHoursData {
   date: string;
   hours: number;
 }
 
-export async function getDailyHours(startDate?: Date, endDate?: Date): Promise<DailyHoursData[]> {
+export async function getDailyHours(
+  id: string,
+  startDate?: Date,
+  endDate?: Date
+): Promise<DailyHoursData[]> {
   const now = new Date();
   const defaultStartDate = new Date(now);
   defaultStartDate.setDate(now.getDate() - 30); // Last 30 days by default
@@ -21,7 +25,13 @@ export async function getDailyHours(startDate?: Date, endDate?: Date): Promise<D
   const entries = await db
     .select()
     .from(timeEntries)
-    .where(and(gte(timeEntries.startTime, start), lte(timeEntries.startTime, end)));
+    .where(
+      and(
+        eq(timeEntries.projectId, id),
+        gte(timeEntries.startTime, start),
+        lte(timeEntries.startTime, end)
+      )
+    );
 
   // Group by date and calculate total hours
   const dailyMap = new Map<string, number>();

@@ -4,13 +4,15 @@ import { DailyHoursBarChart } from "@/components/charts/daily-hours-bar-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function ReportsPageContent({
+  id,
   startDate,
   endDate,
 }: {
+  id: string;
   startDate?: Date;
   endDate?: Date;
 }) {
-  const dailyHoursData = await getDailyHours(startDate, endDate);
+  const dailyHoursData = await getDailyHours(id, startDate, endDate);
 
   return (
     <div className="space-y-6">

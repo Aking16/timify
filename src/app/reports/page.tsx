@@ -1,38 +1,29 @@
-import { Suspense } from "react";
+"use client";
 
-import { SidebarLayout } from "@/components/sidebar/sidebar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useEffect } from "react";
 
-import ReportsPageContent from "./components/page-content";
-import ReportsRangePicker from "./components/reports-range-picker";
+import { getActiveProject } from "@/data/get-active-project";
+import { useRouter } from "nextjs-toploader/app";
 
-export default async function ReportsPage(props: {
-  searchParams?: Promise<{
-    startDate?: string;
-    endDate?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const startDate = searchParams?.startDate ? new Date(Number(searchParams.startDate)) : undefined;
-  const endDate = searchParams?.endDate ? new Date(Number(searchParams.endDate)) : undefined;
+export default function Home() {
+  const router = useRouter();
+
+  const activeProject = getActiveProject();
+
+  useEffect(() => {
+    if (activeProject.id) router.push(`/project/${activeProject.id}/reports`);
+  }, [activeProject.id, router]);
 
   return (
-    <SidebarLayout>
-      <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
-        <div className="flex items-center gap-2 w-full">
-          <SidebarTrigger />
-          <span>گزارش‌ ها</span>
-          <ReportsRangePicker />
+    <div>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+          <div className="bg-muted/50 aspect-video rounded-xl" />
+          <div className="bg-muted/50 aspect-video rounded-xl" />
+          <div className="bg-muted/50 aspect-video rounded-xl" />
         </div>
-      </header>
-      <main className="p-4 space-y-6">
-        <Suspense
-          key={`reports-page-suspense-${searchParams?.startDate}-${searchParams?.endDate}`}
-          fallback={<div>loading...</div>}
-        >
-          <ReportsPageContent startDate={startDate} endDate={endDate} />
-        </Suspense>
-      </main>
-    </SidebarLayout>
+        <div className="bg-muted/50 min-h-screen flex-1 rounded-xl md:min-h-min" />
+      </div>
+    </div>
   );
 }
