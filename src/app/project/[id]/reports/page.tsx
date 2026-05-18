@@ -22,10 +22,10 @@ export default async function ReportsPage({
   return (
     <div className="space-y-6">
       <Suspense
-        key={`reports-page-suspense-${sp?.startDate}-${sp?.endDate}`}
+        key={`reports-page-suspense-${id}-${sp?.startDate}-${sp?.endDate}`}
         fallback={<ReportsLoading />}
       >
-        <ReportsPageContent id={id} startDate={startDate} endDate={endDate} />
+        <ReportsPageContent key={id} id={id} startDate={startDate} endDate={endDate} />
       </Suspense>
     </div>
   );
