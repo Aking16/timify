@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { projects } from "@/db/schema";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 
@@ -56,7 +56,8 @@ export async function createProject(
       })
       .returning();
 
-    revalidatePath("/"); // or your projects path
+    revalidatePath("/");
+    revalidateTag("get-projects", "max");
 
     return {
       success: true,

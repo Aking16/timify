@@ -13,7 +13,6 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
-import { SWRResponse } from "swr";
 
 import {
   DropdownMenu,
@@ -27,12 +26,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui
 import CreateProjectDialog from "../layout/create-project-dialog";
 import { Skeleton } from "../ui/skeleton";
 
-export function ProjectSelector({
-  data,
-  error,
-  isLoading,
-  mutate,
-}: SWRResponse<(typeof projects.$inferSelect)[]>) {
+export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)[] }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -59,8 +53,7 @@ export function ProjectSelector({
     }
   }
 
-  if (error) return <p>خطا در دریافت پروژه</p>;
-  if (isLoading) return <Skeleton className="h-12 w-full" />;
+  if (!data) return <Skeleton className="h-12 w-full" />;
 
   return (
     <>
@@ -105,7 +98,7 @@ export function ProjectSelector({
           </DropdownMenu>
         </SidebarMenuItem>
       </SidebarMenu>
-      <CreateProjectDialog isOpen={isOpen} setOpen={setOpen} mutate={mutate} />
+      <CreateProjectDialog isOpen={isOpen} setOpen={setOpen} />
     </>
   );
 }

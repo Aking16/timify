@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { projects } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
@@ -36,6 +36,7 @@ export async function deleteProject(id: string): Promise<DeleteProjectState> {
     await db.delete(projects).where(eq(projects.id, id));
 
     revalidatePath("/projects/");
+    revalidateTag("get-projects", "max");
 
     return {
       success: true,

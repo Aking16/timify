@@ -1,9 +1,8 @@
 "use client";
 
-import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
+import { Dispatch, SetStateAction, useActionState } from "react";
 
 import { createProject } from "@/actions/projects/create-project";
-import { SWRResponse } from "swr";
 
 import { Button } from "../ui/button";
 import {
@@ -20,20 +19,10 @@ import { Input } from "../ui/input";
 interface CreateProjectDialogProps {
   isOpen?: boolean;
   setOpen?: Dispatch<SetStateAction<boolean>>;
-  mutate?: SWRResponse["mutate"];
 }
 
-export default function CreateProjectDialog({ isOpen, setOpen, mutate }: CreateProjectDialogProps) {
+export default function CreateProjectDialog({ isOpen, setOpen }: CreateProjectDialogProps) {
   const [state, formAction, isPending] = useActionState(createProject, null);
-
-  useEffect(() => {
-    if (!mutate) return;
-
-    if (state?.success && state.project) {
-      // Refresh the projects list
-      mutate();
-    }
-  }, [state, mutate]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>

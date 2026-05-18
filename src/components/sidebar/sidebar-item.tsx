@@ -1,7 +1,11 @@
-import { projects, timeEntries } from "@/db/schema";
+"use client";
+
+import { getTimeEntries } from "@/actions/time-entries/get-time-entry";
+import { getActiveProject } from "@/data/get-active-project";
+import { projects } from "@/db/schema";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 import Link from "next/link";
-import { SWRResponse } from "swr";
+import useSWR from "swr";
 
 import { SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
@@ -10,18 +14,14 @@ interface SidebarItemProps {
   icon: IconSvgElement;
   href: string;
   badge: string | null;
-  projectsData?: SWRResponse<(typeof projects.$inferSelect)[]>;
-  timeEntriesData?: SWRResponse<(typeof timeEntries.$inferSelect)[]>;
+  projectsData?: (typeof projects.$inferSelect)[];
 }
 
-export default function SidebarItem({
-  title,
-  icon,
-  href,
-  badge,
-  projectsData,
-  timeEntriesData,
-}: SidebarItemProps) {
+export default function SidebarItem({ title, icon, href, badge, projectsData }: SidebarItemProps) {
+  const activeProject = getActiveProject();
+
+  const timeEntries = useSWR("all-time-entries", () => getTimeEntries(activeProject.id ?? ""));
+
   if (href === "/") {
     return (
       <SidebarMenuItem>
@@ -31,7 +31,7 @@ export default function SidebarItem({
             <span>{title}</span>
           </Link>
         </SidebarMenuButton>
-        <SidebarMenuBadge>{timeEntriesData?.data?.length}</SidebarMenuBadge>
+        <SidebarMenuBadge>{timeEntries.data?.length}</SidebarMenuBadge>
       </SidebarMenuItem>
     );
   }
@@ -45,7 +45,7 @@ export default function SidebarItem({
             <span>{title}</span>
           </Link>
         </SidebarMenuButton>
-        <SidebarMenuBadge>{projectsData?.data?.length}</SidebarMenuBadge>
+        <SidebarMenuBadge>{projectsData?.length}</SidebarMenuBadge>
       </SidebarMenuItem>
     );
   }

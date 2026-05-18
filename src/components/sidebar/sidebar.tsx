@@ -1,7 +1,4 @@
-"use client";
-
 import { getProjects } from "@/actions/projects/get-projects";
-import { getTimeEntries } from "@/actions/time-entries/get-time-entry";
 import {
   CalendarIcon,
   ClockIcon,
@@ -9,7 +6,6 @@ import {
   HomeIcon,
   TimerIcon,
 } from "@hugeicons/core-free-icons";
-import useSWR from "swr";
 
 import {
   Sidebar,
@@ -48,14 +44,13 @@ const navItems = [
   },
 ];
 
-export function AppSidebar() {
-  const projects = useSWR("all-projects", getProjects);
-  const timeEntries = useSWR("all-time-entries", getTimeEntries);
+export async function AppSidebar() {
+  const projects = await getProjects();
 
   return (
     <Sidebar variant="inset" collapsible="icon" side="right" dir="rtl">
       <SidebarHeader>
-        <ProjectSelector {...projects} />
+        <ProjectSelector data={projects} />
       </SidebarHeader>
       <SidebarSeparator />
       <StartTimer />
@@ -68,9 +63,8 @@ export function AppSidebar() {
                 {group.items.map((item) => (
                   <SidebarItem
                     key={`sidebar-item-menu-${item.href}`}
-                    {...item}
                     projectsData={projects}
-                    timeEntriesData={timeEntries}
+                    {...item}
                   />
                 ))}
               </SidebarMenu>
