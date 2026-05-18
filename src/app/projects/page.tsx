@@ -2,8 +2,8 @@ import { getProjects } from "@/actions/projects/get-projects";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { columns } from "./table/columns";
-import { DataTable } from "./table/data-table";
+import { columns } from "./components/table/columns";
+import { DataTable } from "./components/table/data-table";
 
 export default async function Page() {
   const projects = await getProjects();

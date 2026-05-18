@@ -1,12 +1,12 @@
 "use client";
 
 import { projects } from "@/db/schema";
-import { CancelIcon, Edit02Icon, TickIcon } from "@hugeicons/core-free-icons";
+import { CancelIcon, TickIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns-jalali";
 
-import { Button } from "@/components/ui/button";
+import EditDialog from "../edit-dialog";
 
 export const columns: ColumnDef<typeof projects.$inferSelect>[] = [
   {
@@ -24,6 +24,11 @@ export const columns: ColumnDef<typeof projects.$inferSelect>[] = [
   {
     accessorKey: "color",
     header: "رنگ",
+    cell: ({ row }) => {
+      const color = row.getValue("color") as string;
+
+      return <div style={{ backgroundColor: color }} className="size-6 rounded-full" />;
+    },
   },
   {
     accessorKey: "isActive",
@@ -59,12 +64,12 @@ export const columns: ColumnDef<typeof projects.$inferSelect>[] = [
   {
     accessorKey: "actions",
     header: "عملیات",
-    cell: () => {
+    cell: ({ row }) => {
+      const data = row.original;
+
       return (
         <div>
-          <Button size="icon" variant="outline">
-            <HugeiconsIcon icon={Edit02Icon} />
-          </Button>
+          <EditDialog {...data} />
         </div>
       );
     },

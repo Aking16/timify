@@ -1,7 +1,7 @@
 import { useActionState, useState } from "react";
 
 import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
-import { editTimeEntry } from "@/actions/time-entries/edit-time.entry";
+import { editTimeEntry } from "@/actions/time-entries/edit-time-entry";
 import { timeEntries } from "@/db/schema";
 import { faIR } from "@daypicker/persian";
 import { ChevronDown, Edit02Icon, Trash } from "@hugeicons/core-free-icons";
