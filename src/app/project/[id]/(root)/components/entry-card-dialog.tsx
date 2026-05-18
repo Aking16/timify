@@ -3,10 +3,10 @@ import { useActionState, useState } from "react";
 import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
 import { editTimeEntry } from "@/actions/time-entries/edit-time-entry";
 import { timeEntries } from "@/db/schema";
-import { faIR } from "@daypicker/persian";
 import { ChevronDown, Edit02Icon, Trash } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { format } from "date-fns-jalali";
+import { faIR } from "date-fns-jalali/locale";
 
 import StatusMessage from "@/components/cards/status-message";
 import { Button } from "@/components/ui/button";
@@ -32,10 +32,51 @@ export default function EntryCardDialog({
   endTime,
 }: typeof timeEntries.$inferSelect) {
   const [isOpen, setOpen] = useState(false);
-  const [isPopoverOpen, setPopoverOpen] = useState(false);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [isStartPopoverOpen, setStartPopoverOpen] = useState(false);
+  const [isEndPopoverOpen, setEndPopoverOpen] = useState(false);
+
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    startTime ? new Date(startTime) : undefined
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(endTime ? new Date(endTime) : undefined);
+
+  const [startTimeValue, setStartTimeValue] = useState<string>(
+    startTime ? format(startTime, "HH:mm") : ""
+  );
+  const [endTimeValue, setEndTimeValue] = useState<string>(endTime ? format(endTime, "HH:mm") : "");
 
   const [state, formAction, isPending] = useActionState(editTimeEntry, null);
+
+  // Combine date and time for startTime
+  function getCombinedStartDateTime() {
+    if (!startDate) return startTime?.toISOString() ?? "";
+
+    const [hours, minutes] = startTimeValue.split(":");
+    const combined = new Date(startDate);
+
+    combined.setHours(parseInt(hours) ?? 0, parseInt(minutes) ?? 0);
+
+    return combined.toISOString();
+  }
+
+  // Combine date and time for endTime
+  function getCombinedEndDateTime() {
+    if (!endDate) return endTime?.toISOString() ?? "";
+
+    const [hours, minutes] = endTimeValue.split(":");
+    const combined = new Date(endDate);
+
+    combined.setHours(parseInt(hours) ?? 0, parseInt(minutes) ?? 0);
+
+    return combined.toISOString();
+  }
+
+  const handleSubmit = (formData: FormData) => {
+    // Set the combined datetime values
+    formData.set("startTime", getCombinedStartDateTime());
+    formData.set("endTime", getCombinedEndDateTime());
+    formAction(formData);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -49,8 +90,8 @@ export default function EntryCardDialog({
           <DialogTitle>ویرایش تسک</DialogTitle>
           <DialogDescription>تسک خود را ویرایش کن</DialogDescription>
         </DialogHeader>
-        <form id="edit-task-form" className="space-y-4 py-4" action={formAction}>
-          <input type="text" name="id" value={id} readOnly className="hidden" />
+        <form id="edit-task-form" className="space-y-4 py-4" action={handleSubmit}>
+          <input type="hidden" name="id" value={id} />
 
           <FieldGroup>
             <Field>
@@ -78,17 +119,19 @@ export default function EntryCardDialog({
               />
             </Field>
           </FieldGroup>
+
           <FieldGroup className="grid grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="date-picker-optional">زمان شروع</FieldLabel>
-              <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
+              <FieldLabel htmlFor="start-date">تاریخ شروع</FieldLabel>
+              <Popover open={isStartPopoverOpen} onOpenChange={setStartPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    id="date-picker-optional"
-                    className="w-32 justify-between font-normal"
+                    id="start-date"
+                    className="w-full justify-between font-normal"
+                    type="button"
                   >
-                    {startTime ? format(startTime, "P") : "تاریخ شروع"}
+                    {startDate ? format(startDate, "P") : "انتخاب تاریخ"}
                     <HugeiconsIcon icon={ChevronDown} />
                   </Button>
                 </PopoverTrigger>
@@ -98,10 +141,10 @@ export default function EntryCardDialog({
                     selected={startDate}
                     captionLayout="dropdown"
                     locale={faIR}
-                    defaultMonth={startTime ?? undefined}
+                    defaultMonth={startDate ?? startTime ?? undefined}
                     onSelect={(date) => {
                       setStartDate(date);
-                      setOpen(false);
+                      setStartPopoverOpen(false);
                     }}
                   />
                 </PopoverContent>
@@ -112,30 +155,65 @@ export default function EntryCardDialog({
               <Input
                 id="start-time"
                 type="time"
-                name="startTime"
-                defaultValue={startTime?.toISOString().slice(0, 16)}
+                value={startTimeValue}
+                onChange={(e) => setStartTimeValue(e.target.value)}
                 required
               />
+            </Field>
+          </FieldGroup>
+          <FieldGroup className="grid grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="end-date">تاریخ پایان</FieldLabel>
+              <Popover open={isEndPopoverOpen} onOpenChange={setEndPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="end-date"
+                    className="w-full justify-between font-normal"
+                    type="button"
+                  >
+                    {endDate ? format(endDate, "P") : "انتخاب تاریخ"}
+                    <HugeiconsIcon icon={ChevronDown} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    captionLayout="dropdown"
+                    locale={faIR}
+                    defaultMonth={endDate ?? endTime ?? undefined}
+                    onSelect={(date) => {
+                      setEndDate(date);
+                      setEndPopoverOpen(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </Field>
             <Field>
               <FieldLabel htmlFor="end-time">زمان پایان</FieldLabel>
               <Input
                 id="end-time"
-                type="datetime-local"
-                name="endTime"
-                defaultValue={endTime?.toISOString().slice(0, 16)}
+                type="time"
+                value={endTimeValue}
+                onChange={(e) => setEndTimeValue(e.target.value)}
+                required
               />
             </Field>
           </FieldGroup>
         </form>
+
         <StatusMessage status={state?.success ? "success" : "error"} message={state?.message} />
+
         <DialogFooter>
           <Button
             type="button"
             variant="destructive"
             className="me-auto"
-            onClick={() => {
-              deleteTimeEntry(id);
+            onClick={async () => {
+              await deleteTimeEntry(id);
+              setOpen(false);
             }}
           >
             <HugeiconsIcon icon={Trash} />

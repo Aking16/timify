@@ -62,10 +62,8 @@ export async function editTimeEntry(
   }
 
   const id = validatedFields.data.id;
-  const startTime = new Date(validatedFields.data.startTime + "Z");
-  const endTime = validatedFields.data.endTime
-    ? new Date(validatedFields.data.endTime + "Z")
-    : null;
+  const startTime = new Date(validatedFields.data.startTime);
+  const endTime = validatedFields.data.endTime ? new Date(validatedFields.data.endTime) : null;
 
   const durationInSeconds = Math.floor(((endTime?.getTime() ?? 0) - startTime.getTime()) / 1000);
 
