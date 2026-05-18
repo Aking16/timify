@@ -62,6 +62,7 @@ export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect)
             size="sm"
             disabled={isPending || !props.isRunning}
             onClick={handleStartClick}
+            suppressHydrationWarning
           >
             {currentDuration}
             <HugeiconsIcon

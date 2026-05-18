@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { getProjects } from "@/actions/projects/get-projects";
 import {
   CalendarIcon,
@@ -21,6 +23,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 
+import { Skeleton } from "../ui/skeleton";
 import { ProjectSelector } from "./project-selector";
 import SidebarItem from "./sidebar-item";
 import SidebarSecondaryItems from "./sidebar-secondary-items";
@@ -50,7 +53,9 @@ export async function AppSidebar() {
   return (
     <Sidebar variant="inset" collapsible="icon" side="right" dir="rtl">
       <SidebarHeader>
-        <ProjectSelector data={projects} />
+        <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+          <ProjectSelector data={projects} />
+        </Suspense>
       </SidebarHeader>
       <SidebarSeparator />
       <StartTimer />

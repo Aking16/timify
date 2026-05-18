@@ -2,7 +2,7 @@ import { getTimeEntries } from "@/actions/time-entries/get-time-entry";
 
 import EntryCard from "./components/entry-card";
 
-export default async function Test({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const timeEntries = await getTimeEntries(id);

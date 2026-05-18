@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getActiveProject } from "@/data/get-active-project";
 import { projects } from "@/db/schema";
@@ -11,6 +11,7 @@ import {
   TickIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useMount } from "ahooks";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 
@@ -31,11 +32,24 @@ export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)
   const pathname = usePathname();
 
   const [isOpen, setOpen] = useState(false);
+  const [activeProject, setActiveProject] = useState<{
+    id: string | null;
+    name: string | null;
+  } | null>(null);
+  const [isMounted, setMounted] = useState(false);
 
-  const activeProject = getActiveProject();
+  useMount(() => {
+    setMounted(true);
+  });
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveProject(getActiveProject());
+  }, []);
 
   function handleSelectProject(id: string, name: string) {
     localStorage.setItem("active-project", JSON.stringify({ id, name }));
+    setActiveProject({ id, name });
 
     // Check if we're on a project route (matches /project/:id/* pattern)
     const projectRoutePattern = /^\/project\/([^\/]+)(\/.*)?$/;
@@ -54,6 +68,11 @@ export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)
   }
 
   if (!data) return <Skeleton className="h-12 w-full" />;
+
+  // Show a consistent skeleton during SSR and initial hydration
+  if (!isMounted) {
+    return <Skeleton className="h-12 w-full" />;
+  }
 
   return (
     <>
