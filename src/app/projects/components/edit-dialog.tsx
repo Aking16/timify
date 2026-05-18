@@ -1,7 +1,7 @@
 import { useActionState, useState } from "react";
 
+import { deleteProject } from "@/actions/projects/delete-time-entry";
 import { editProject } from "@/actions/projects/edit-project";
-import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
 import { projects } from "@/db/schema";
 import { Edit02Icon, Trash } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -116,7 +116,7 @@ export default function EditDialog({
             variant="destructive"
             className="sm:me-auto"
             onClick={() => {
-              deleteTimeEntry(id);
+              deleteProject(id);
             }}
           >
             <HugeiconsIcon icon={Trash} />

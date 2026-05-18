@@ -83,17 +83,19 @@ export function ProjectSelector({
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)" align="start">
-              {data?.map((item) => (
-                <DropdownMenuItem
-                  key={`projects-selection-${item.id}`}
-                  onSelect={() => handleSelectProject(item.id, item.name)}
-                >
-                  {item.name}{" "}
-                  {item.id === activeProject?.id && (
-                    <HugeiconsIcon icon={TickIcon} className="ms-auto" />
-                  )}
-                </DropdownMenuItem>
-              ))}
+              {data
+                ?.filter((item) => item.isActive)
+                .map((item) => (
+                  <DropdownMenuItem
+                    key={`projects-selection-${item.id}`}
+                    onSelect={() => handleSelectProject(item.id, item.name)}
+                  >
+                    {item.name}{" "}
+                    {item.id === activeProject?.id && (
+                      <HugeiconsIcon icon={TickIcon} className="ms-auto" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
               <DropdownMenuSeparator />
               <DropdownMenuItem key="projects-selection-new" onSelect={() => setOpen(true)}>
                 <HugeiconsIcon icon={PlusSignIcon} className="ml-2 h-4 w-4" />

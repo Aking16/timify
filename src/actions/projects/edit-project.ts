@@ -25,15 +25,15 @@ const schema = z.object({
   isActive: z.string(),
 });
 
-export type EditTimeEntryState = {
+export type EditProjectState = {
   message?: string;
   success?: boolean;
 } | null;
 
 export async function editProject(
-  _prevState: EditTimeEntryState,
+  _prevState: EditProjectState,
   formData: FormData
-): Promise<EditTimeEntryState> {
+): Promise<EditProjectState> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
