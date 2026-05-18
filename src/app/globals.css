@@ -119,14 +119,62 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  input[type="color"] {
+    @apply overflow-hidden rounded-md p-0;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    @apply rounded-md p-0;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    @apply border-input rounded-md border;
+  }
+
   html {
     @apply font-iransanx;
+  }
+
+  .scroll-bar {
+    overflow-y: auto;
+    /* Enable scrolling */
+    scrollbar-width: thin;
+    /* For Firefox (thin | auto | none) */
+    scrollbar-color: var(--primary) var(--muted);
+    /* thumb color | track color */
+  }
+
+  /* For Chrome, Edge, and Safari */
+  .scroll-bar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scroll-bar::-webkit-scrollbar-track {
+    background: var(--muted);
+    /* Track color */
+    border-radius: 10px;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    /* Scroll thumb color */
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    /* Optional: adds space around thumb */
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--secondary);
+    /* Darker on hover */
   }
 }

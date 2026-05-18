@@ -51,7 +51,11 @@ export default function EditDialog({
           <DialogTitle>ویرایش پروژه</DialogTitle>
           <DialogDescription>پروژه خود را ویرایش کن</DialogDescription>
         </DialogHeader>
-        <form id="edit-task-form" className="space-y-4 py-4" action={formAction}>
+        <form
+          id="edit-task-form"
+          className="space-y-4 py-4 max-h-[52svh] pe-2 scroll-bar"
+          action={formAction}
+        >
           <input type="text" name="id" value={id} readOnly className="hidden" />
 
           <FieldGroup>
@@ -80,7 +84,7 @@ export default function EditDialog({
             </Field>
             <Field>
               <FieldLabel htmlFor="color">رنگ</FieldLabel>
-              <Input
+              <input
                 id="color"
                 name="color"
                 type="color"
