@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+
 import { SidebarLayout } from "@/components/sidebar/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import ReportsRangePicker from "./components/reports-range-picker";
 
@@ -14,7 +17,9 @@ export default function Layout({
         <div className="flex items-center gap-2 w-full">
           <SidebarTrigger />
           <span>گزارش‌ ها</span>
-          <ReportsRangePicker />
+          <Suspense fallback={<Skeleton className="w-60 h-8 ms-auto" />}>
+            <ReportsRangePicker />
+          </Suspense>
         </div>
       </header>
       <main className="p-4 ">{children}</main>

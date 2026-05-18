@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import ReportsPageContent from "./components/page-content";
+import ReportsLoading from "./components/reports-loading";
 
 export default async function ReportsPage({
   searchParams,
@@ -22,7 +23,7 @@ export default async function ReportsPage({
     <div className="space-y-6">
       <Suspense
         key={`reports-page-suspense-${sp?.startDate}-${sp?.endDate}`}
-        fallback={<div>loading...</div>}
+        fallback={<ReportsLoading />}
       >
         <ReportsPageContent id={id} startDate={startDate} endDate={endDate} />
       </Suspense>
