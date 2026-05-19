@@ -62,6 +62,7 @@ export default function CreateTagDialog() {
                 name="color"
                 type="color"
                 placeholder="رنگ پروژه خود را وارد کنید"
+                defaultValue="#CA3500"
               />
             </Field>
           </FieldGroup>
