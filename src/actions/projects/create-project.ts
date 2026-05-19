@@ -61,6 +61,7 @@ export async function createProject(
 
     revalidatePath("/");
     revalidateTag("get-projects", "max");
+    revalidateTag("retrieve-project", "max");
 
     return {
       success: true,

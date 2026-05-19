@@ -37,6 +37,7 @@ export async function deleteProject(id: string): Promise<DeleteProjectState> {
 
     revalidatePath("/projects/");
     revalidateTag("get-projects", "max");
+    revalidateTag("retrieve-project", "max");
 
     return {
       success: true,
