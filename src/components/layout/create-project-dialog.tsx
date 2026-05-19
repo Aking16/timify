@@ -1,8 +1,10 @@
 "use client";
 
-import { Dispatch, SetStateAction, useActionState } from "react";
+import { Dispatch, SetStateAction, useActionState, useState } from "react";
 
 import { createProject } from "@/actions/projects/create-project";
+
+import { numberToPersianWords } from "@/lib/persian-number-to-words";
 
 import { Button } from "../ui/button";
 import {
@@ -13,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { Field, FieldGroup, FieldLabel } from "../ui/field";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
 interface CreateProjectDialogProps {
@@ -22,6 +24,8 @@ interface CreateProjectDialogProps {
 }
 
 export default function CreateProjectDialog({ isOpen, setOpen }: CreateProjectDialogProps) {
+  const [hourlyRate, setHourlyRate] = useState(0);
+
   const [state, formAction, isPending] = useActionState(createProject, null);
 
   return (
@@ -53,6 +57,18 @@ export default function CreateProjectDialog({ isOpen, setOpen }: CreateProjectDi
                 placeholder="توضیحات پروژه خود را وارد کنید"
               />
             </Field>
+            <Field>
+              <FieldLabel htmlFor="hourlyRate">نرخ ساعتی (اختیاری)</FieldLabel>
+              <Input
+                id="hourlyRate"
+                name="hourlyRate"
+                type="number"
+                placeholder="نرخ ساعتی پروژه خود را وارد کنید"
+                value={String(hourlyRate)}
+                onChange={(e) => setHourlyRate(Number(e.target.value))}
+              />
+            </Field>
+            <FieldDescription>{numberToPersianWords(hourlyRate)}</FieldDescription>
           </FieldGroup>
         </form>
 

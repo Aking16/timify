@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { projects } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 
@@ -21,6 +21,7 @@ const schema = z.object({
     .min(4, "نام باید حداقل ۴ کاراکتر باشد")
     .max(32, "نام باید حداکثر ۳۲ کاراکتر باشد"),
   description: z.string().optional(),
+  hourlyRate: z.string().optional(),
   color: z.string().optional(),
   isActive: z.string(),
 });
@@ -56,13 +57,14 @@ export async function editProject(
     };
   }
 
-  const { id, name, description, isActive, color } = validatedFields.data;
+  const { id, name, description, hourlyRate, isActive, color } = validatedFields.data;
 
   try {
     await db
       .update(projects)
       .set({
         isActive: convertStringToBoolean(isActive),
+        hourlyRate: Number(hourlyRate),
         name,
         description,
         color,
@@ -70,6 +72,7 @@ export async function editProject(
       .where(eq(projects.id, id));
 
     revalidatePath("/projects/");
+    revalidateTag("get-projects", "max");
 
     return {
       success: true,

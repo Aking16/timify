@@ -28,14 +28,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
+import { numberToPersianWords } from "@/lib/persian-number-to-words";
+
 export default function EditDialog({
   id,
   name,
   description,
+  hourlyRate,
   color,
   isActive,
 }: typeof projects.$inferSelect) {
   const [isOpen, setOpen] = useState(false);
+  const [hourly, setHourly] = useState(hourlyRate);
 
   const [state, formAction, isPending] = useActionState(editProject, null);
 
@@ -81,6 +85,18 @@ export default function EditDialog({
                 defaultValue={description!}
                 minLength={4}
               />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="hourlyRate">نرخ ساعتی</FieldLabel>
+              <Input
+                id="hourlyRate"
+                name="hourlyRate"
+                type="number"
+                placeholder="نرخ ساعتی پروژه خود را وارد کنید"
+                value={String(hourly)}
+                onChange={(e) => setHourly(Number(e.target.value))}
+              />
+              <FieldDescription>{numberToPersianWords(String(hourly))}</FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="color">رنگ</FieldLabel>

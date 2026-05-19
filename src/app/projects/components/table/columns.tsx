@@ -6,6 +6,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns-jalali";
 
+import Toman from "@/components/ui/toman";
+
 import EditDialog from "../edit-dialog";
 
 export const columns: ColumnDef<typeof projects.$inferSelect>[] = [
@@ -20,6 +22,15 @@ export const columns: ColumnDef<typeof projects.$inferSelect>[] = [
   {
     accessorKey: "description",
     header: "توضیحات",
+  },
+  {
+    accessorKey: "hourlyRate",
+    header: "نرخ ساعتی",
+    cell: ({ row }) => {
+      const hourlyRate = row.getValue("hourlyRate") as string;
+
+      return <Toman price={Number(hourlyRate)} />;
+    },
   },
   {
     accessorKey: "color",
