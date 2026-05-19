@@ -198,7 +198,6 @@ export default function EntryCardDialog({
                 type="time"
                 value={endTimeValue}
                 onChange={(e) => setEndTimeValue(e.target.value)}
-                required
               />
             </Field>
           </FieldGroup>
