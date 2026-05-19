@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { PlusSignCircleIcon, TagIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 
 import {
   SidebarGroup,
@@ -24,15 +25,17 @@ export default function SidebarSecondaryItems() {
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="افزودن پروژه" onClick={() => setOpen((prev) => !prev)}>
-                <HugeiconsIcon icon={PlusSignCircleIcon} data-icon="inline-start" />
-                <span>افزودن پروژه</span>
+              <SidebarMenuButton tooltip="برچسب‌ها" asChild>
+                <Link href="/tags">
+                  <HugeiconsIcon icon={TagIcon} data-icon="inline-start" />
+                  <span>برچسب‌ها</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="برچسب‌ها">
-                <HugeiconsIcon icon={TagIcon} data-icon="inline-start" />
-                <span>برچسب‌ها</span>
+              <SidebarMenuButton tooltip="افزودن پروژه" onClick={() => setOpen((prev) => !prev)}>
+                <HugeiconsIcon icon={PlusSignCircleIcon} data-icon="inline-start" />
+                <span>افزودن پروژه</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
