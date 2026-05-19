@@ -1,7 +1,10 @@
-import { getDailyHours } from "@/actions/reports/get-daily-hours";
+import { retrieveProject } from "@/actions/projects/retrieve-project";
+import { getReports } from "@/actions/reports/get-daily-hours";
 
 import { DailyHoursBarChart } from "@/components/charts/daily-hours-bar-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import SummaryCards from "./summary-cards";
 
 export default async function ReportsPageContent({
   id,
@@ -12,49 +15,12 @@ export default async function ReportsPageContent({
   startDate?: Date;
   endDate?: Date;
 }) {
-  const dailyHoursData = await getDailyHours(id, startDate, endDate);
+  const dailyHoursData = await getReports(id, startDate, endDate);
+  const project = await retrieveProject(id);
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">کل ساعات</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {dailyHoursData.reduce((sum, d) => sum + d.hours, 0).toFixed(1)} ساعت
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">روزهای فعال</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dailyHoursData.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              میانگین روزانه
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {dailyHoursData.length > 0
-                ? (
-                    dailyHoursData.reduce((sum, d) => sum + d.hours, 0) / dailyHoursData.length
-                  ).toFixed(1)
-                : 0}{" "}
-              ساعت
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
+      <SummaryCards dailyHoursData={dailyHoursData} project={project} />
       <Card>
         <CardHeader>
           <CardTitle>ساعت های کاری روزانه</CardTitle>

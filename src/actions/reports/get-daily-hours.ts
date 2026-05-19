@@ -9,7 +9,7 @@ export interface DailyHoursData {
   hours: number;
 }
 
-export async function getDailyHours(
+export async function getReports(
   id: string,
   startDate?: Date,
   endDate?: Date
