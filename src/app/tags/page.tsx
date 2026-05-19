@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import CreateTagDialog from "./components/create-tag-dialog";
+import CreateTagTrigger from "./components/create-tag-trigger";
 import { columns } from "./components/table/columns";
 
 export default async function Page() {
@@ -20,10 +20,10 @@ export default async function Page() {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>همه پروژه ها</CardTitle>
-          <CardDescription>لیست تمامی پروژه ها</CardDescription>
+          <CardTitle>همه برچسب ها</CardTitle>
+          <CardDescription>لیست تمامی برچسب ها</CardDescription>
           <CardAction>
-            <CreateTagDialog />
+            <CreateTagTrigger />
           </CardAction>
         </CardHeader>
         <CardContent>

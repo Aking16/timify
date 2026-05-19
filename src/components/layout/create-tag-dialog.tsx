@@ -1,10 +1,8 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { Dispatch, SetStateAction, useActionState } from "react";
 
 import { createTag } from "@/actions/tags/create-tag";
-import { AddIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 
 import StatusMessage from "@/components/cards/status-message";
 import { Button } from "@/components/ui/button";
@@ -15,24 +13,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-export default function CreateTagDialog() {
-  const [isOpen, setOpen] = useState(false);
+interface CreateTagDialogProps {
+  isOpen: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
 
+export default function CreateTagDialog({ isOpen, setOpen }: CreateTagDialogProps) {
   const [state, formAction, isPending] = useActionState(createTag, null);
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <HugeiconsIcon icon={AddIcon} />
-          ساختن برچسب
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>ویرایش پروژه</DialogTitle>
