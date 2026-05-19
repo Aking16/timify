@@ -11,8 +11,7 @@ import { auth } from "@/lib/auth";
 const schema = z.object({
   name: z.string().min(4, "Project name must be at least 4 characters"),
   description: z.string().optional().nullable(),
-  color: z.string().optional().nullable(),
-  isActive: z.boolean().default(true),
+  hourlyRate: z.string().optional().nullable(),
 });
 
 export type CreateProjectState = {
@@ -47,12 +46,16 @@ export async function createProject(
     };
   }
 
+  const { name, description, hourlyRate } = validatedFields.data;
+
   try {
     const [createdProject] = await db
       .insert(projects)
       .values({
-        ...validatedFields.data,
         userId: session.user.id,
+        hourlyRate: Number(hourlyRate),
+        name,
+        description,
       })
       .returning();
 
