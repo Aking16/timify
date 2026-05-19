@@ -8,6 +8,13 @@
       "when": 1778764749072,
       "tag": "0000_typical_wolfpack",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779181627244,
+      "tag": "0001_perpetual_spitfire",
+      "breakpoints": true
     }
   ]
 }

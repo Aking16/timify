@@ -90,8 +90,13 @@ export const projects = pgTable("projects", {
   name: text("name").notNull(),
   description: text("description"),
   color: text("color").default("#3b82f6"),
+  hourlyRate: real("hourly_rate").default(0),
   isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 // Time entries table
@@ -113,8 +118,11 @@ export const timeEntries = pgTable("time_entries", {
   isRunning: boolean("is_running").default(true),
   billable: boolean("billable").default(false),
   hourlyRate: real("hourly_rate"), // optional, can override project rate
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).$onUpdateFn(() => new Date()),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 // Tags table (for categorization)
@@ -127,6 +135,11 @@ export const tags = pgTable("tags", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   color: text("color").default("#9ca3af"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 });
 
 // Many-to-many: Time entries ↔ Tags
