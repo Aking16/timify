@@ -1,0 +1,1 @@
+ALTER TABLE "time_entry_tags" ADD CONSTRAINT "time_entry_tags_time_entry_id_tag_id_unique" UNIQUE("time_entry_id","tag_id");

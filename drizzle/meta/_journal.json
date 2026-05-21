@@ -15,6 +15,13 @@
       "when": 1779181627244,
       "tag": "0001_perpetual_spitfire",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779306635578,
+      "tag": "0002_pink_darkhawk",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,14 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, integer, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  real,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -143,17 +152,23 @@ export const tags = pgTable("tags", {
 });
 
 // Many-to-many: Time entries ↔ Tags
-export const timeEntryTags = pgTable("time_entry_tags", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  timeEntryId: text("time_entry_id")
-    .notNull()
-    .references(() => timeEntries.id, { onDelete: "cascade" }),
-  tagId: text("tag_id")
-    .notNull()
-    .references(() => tags.id, { onDelete: "cascade" }),
-});
+export const timeEntryTags = pgTable(
+  "time_entry_tags",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    timeEntryId: text("time_entry_id")
+      .notNull()
+      .references(() => timeEntries.id, { onDelete: "cascade" }),
+    tagId: text("tag_id")
+      .notNull()
+      .references(() => tags.id, { onDelete: "cascade" }),
+  },
+  (table) => ({
+    uniqueTimeEntryTag: unique().on(table.timeEntryId, table.tagId),
+  })
+);
 
 // Relations for TypeScript type safety
 export const usersRelations = relations(user, ({ many }) => ({

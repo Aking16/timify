@@ -2,14 +2,14 @@
 
 import { startTransition, useActionState } from "react";
 
+import { TimeEntryWithTags } from "@/actions/time-entries/get-time-entry";
 import { stopTimeEntry } from "@/actions/time-entries/stop-time-entry";
 import { getActiveProject } from "@/data/get-active-project";
-import { timeEntries } from "@/db/schema";
-import { PlayIcon, StopIcon } from "@hugeicons/core-free-icons";
+import { tags } from "@/db/schema";
+import { PlayIcon, StopIcon, TagIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,15 +21,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { useRealtimeDuration } from "@/hooks/useRealtimeDuration";
+import { useRealtimeDuration } from "@/hooks/use-realtime-duration";
 
 import EntryCardDialog from "./entry-card-dialog";
+import TagsChips from "./tags-chips";
 
-export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect) {
+interface EntryCardProps {
+  timeEntries: TimeEntryWithTags;
+  tags: (typeof tags.$inferSelect)[];
+}
+
+export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
   const currentDuration = useRealtimeDuration(
-    props.startTime,
-    props.isRunning ?? false,
-    props.duration
+    timeEntries.startTime,
+    timeEntries.isRunning ?? false,
+    timeEntries.duration
   );
 
   const [_state, formAction, isPending] = useActionState(stopTimeEntry, null);
@@ -44,7 +50,7 @@ export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect)
       return;
     }
 
-    formData.set("id", props.id);
+    formData.set("id", timeEntries.id);
 
     startTransition(() => {
       formAction(formData);
@@ -54,32 +60,35 @@ export default function EntryCard({ ...props }: typeof timeEntries.$inferSelect)
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{props.title}</CardTitle>
-        <CardDescription>{props.description}</CardDescription>
+        <CardTitle>{timeEntries.title}</CardTitle>
+        <CardDescription>{timeEntries.description}</CardDescription>
         <CardAction className="flex items-center gap-1">
           <Button
             variant="outline"
             size="sm"
-            disabled={isPending || !props.isRunning}
+            disabled={isPending || !timeEntries.isRunning}
             onClick={handleStartClick}
             suppressHydrationWarning
           >
             {currentDuration}
             <HugeiconsIcon
-              icon={props.isRunning ? PlayIcon : StopIcon}
-              fill={props.isRunning ? "green" : "red"}
-              color={props.isRunning ? "green" : "red"}
+              icon={timeEntries.isRunning ? PlayIcon : StopIcon}
+              fill={timeEntries.isRunning ? "green" : "red"}
+              color={timeEntries.isRunning ? "green" : "red"}
             />
           </Button>
-          <EntryCardDialog {...props} />
+          <EntryCardDialog {...timeEntries} />
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>{props.description}</p>
+        <p>{timeEntries.description}</p>
       </CardContent>
       <CardFooter className="block space-y-2 mt-auto">
-        <p>تگ ها</p>
-        <Badge>Test</Badge>
+        <p className="flex items-center gap-1">
+          <HugeiconsIcon icon={TagIcon} size={16} className="text-muted-foreground" />
+          <span>برچسب ها</span>
+        </p>
+        <TagsChips timeEntryId={timeEntries.id} tags={tags} defaultTags={timeEntries.tags} />
       </CardFooter>
     </Card>
   );
