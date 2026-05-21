@@ -23,6 +23,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 
+import { ThemeSwitcher } from "../layout/theme-switcher";
 import { Skeleton } from "../ui/skeleton";
 import { ProjectSelector } from "./project-selector";
 import SidebarItem from "./sidebar-item";
@@ -78,6 +79,7 @@ export async function AppSidebar() {
         ))}
         <SidebarSeparator />
         <SidebarSecondaryItems />
+        <ThemeSwitcher />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
