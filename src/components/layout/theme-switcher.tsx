@@ -23,7 +23,7 @@ export function ThemeSwitcher() {
   return (
     <Button
       variant="secondary"
-      className="mt-auto justify-start h-fit py-1 rounded-none"
+      className="mt-auto justify-start h-fit py-1 rounded-none md:rounded-lg"
       aria-label={`Current theme: ${resolvedTheme}. Click to cycle themes`}
       onClick={cycleTheme}
     >
