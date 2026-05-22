@@ -1,13 +1,7 @@
 import { Suspense } from "react";
 
 import { getProjects } from "@/actions/projects/get-projects";
-import {
-  CalendarIcon,
-  ClockIcon,
-  FolderIcon,
-  HomeIcon,
-  TimerIcon,
-} from "@hugeicons/core-free-icons";
+import { sidebarNavItems } from "@/data/navigation-data";
 
 import {
   Sidebar,
@@ -30,24 +24,6 @@ import SidebarItem from "./sidebar-item";
 import SidebarSecondaryItems from "./sidebar-secondary-items";
 import { StartTimer } from "./start-timer";
 
-const navItems = [
-  {
-    label: "عمومی",
-    items: [
-      { title: "داشبورد", icon: HomeIcon, href: "/", badge: null },
-      { title: "زمان‌ها", icon: ClockIcon, href: "#", badge: null },
-    ],
-  },
-  {
-    label: "پروژه‌ها",
-    items: [
-      { title: "همه پروژه‌ها", icon: FolderIcon, href: "/projects", badge: null },
-      { title: "تقویم", icon: CalendarIcon, href: "#", badge: null },
-      { title: "گزارش‌ها", icon: TimerIcon, href: "/reports", badge: null },
-    ],
-  },
-];
-
 export async function AppSidebar() {
   const projects = await getProjects();
 
@@ -61,7 +37,7 @@ export async function AppSidebar() {
       <SidebarSeparator />
       <StartTimer />
       <SidebarContent>
-        {navItems.map((group) => (
+        {sidebarNavItems.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
             <SidebarGroupContent>
