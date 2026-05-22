@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
-import CreateProjectDialog from "../layout/create-project-dialog";
+import CreateProjectDialog from "../shared/create-project-dialog";
 import { Skeleton } from "../ui/skeleton";
 
 export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)[] }) {

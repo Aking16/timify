@@ -1,5 +1,5 @@
-import React from "react";
+import PageLoading from "@/components/shared/page-loading";
 
 export default function Loading() {
-  return <div>Loading...</div>;
+  return <PageLoading />;
 }

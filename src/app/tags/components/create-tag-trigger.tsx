@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AddIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-import CreateTagDialog from "@/components/layout/create-tag-dialog";
+import CreateTagDialog from "@/components/shared/create-tag-dialog";
 import { Button } from "@/components/ui/button";
 
 export default function CreateTagTrigger() {

@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import CreateProjectDialog from "../layout/create-project-dialog";
+import CreateProjectDialog from "../shared/create-project-dialog";
 
 export default function SidebarSecondaryItems() {
   const [isOpen, setOpen] = useState(false);
