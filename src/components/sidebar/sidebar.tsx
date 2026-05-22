@@ -34,7 +34,7 @@ export async function AppSidebar() {
           <ProjectSelector data={projects} />
         </Suspense>
       </SidebarHeader>
-      <SidebarSeparator />
+      <SidebarSeparator className="m-0" />
       <StartTimer />
       <SidebarContent>
         {sidebarNavItems.map((group) => (

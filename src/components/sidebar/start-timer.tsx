@@ -36,9 +36,9 @@ export function StartTimer() {
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
+      <SidebarMenuItem className="flex w-full justify-center">
         <SidebarMenuButton
-          className={cn(buttonVariants({ size: "lg" }))}
+          className={cn("w-[90%] mt-2 md:w-full", buttonVariants({ size: "lg" }))}
           disabled={isPending}
           onClick={handleStartClick}
         >
