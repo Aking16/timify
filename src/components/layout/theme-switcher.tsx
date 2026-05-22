@@ -6,9 +6,12 @@ import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 
+import { useSidebar } from "../ui/sidebar";
+
 const THEME_CYCLE = ["light", "dark"] as const;
 
 export function ThemeSwitcher() {
+  const { state } = useSidebar();
   const { resolvedTheme, setTheme } = useTheme();
 
   function cycleTheme() {
@@ -18,6 +21,19 @@ export function ThemeSwitcher() {
     const nextTheme = THEME_CYCLE[(currentIndex + 1) % THEME_CYCLE.length];
 
     setTheme(nextTheme);
+  }
+
+  if (state === "collapsed") {
+    return (
+      <Button
+        variant="secondary"
+        className="mt-auto  rounded-none md:rounded-lg"
+        aria-label={`Current theme: ${resolvedTheme}. Click to cycle themes`}
+        onClick={cycleTheme}
+      >
+        <HugeiconsIcon icon={resolvedTheme === "dark" ? Moon02Icon : Sun02Icon} />
+      </Button>
+    );
   }
 
   return (

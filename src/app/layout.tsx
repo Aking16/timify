@@ -30,7 +30,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <Providers>
-          <main className="pb-20">{children}</main>
+          <main className="pb-20 md:pb-0">{children}</main>
           <MobileBottomNavigation />
         </Providers>
       </body>
