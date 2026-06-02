@@ -26,7 +26,7 @@ export default function SidebarSecondaryItems() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="برچسب‌ها" asChild>
-                <Link href="/tags">
+                <Link href="/app/tags">
                   <HugeiconsIcon icon={TagIcon} data-icon="inline-start" />
                   <span>برچسب‌ها</span>
                 </Link>

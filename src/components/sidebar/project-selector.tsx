@@ -55,16 +55,13 @@ export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)
     const projectRoutePattern = /^\/project\/([^\/]+)(\/.*)?$/;
     const match = pathname.match(projectRoutePattern);
 
-    if (match) {
-      // Replace the project ID while keeping the rest of the path
-      const restOfPath = match[2] ?? "";
-      const newPath = `/project/${id}${restOfPath}`;
+    if (!match) return;
 
-      router.push(newPath);
-    } else {
-      // Fallback to default behavior if not on a project route
-      router.push(`/project/${id}`);
-    }
+    // Replace the project ID while keeping the rest of the path
+    const restOfPath = match[2] ?? "";
+    const newPath = `/project/${id}${restOfPath}`;
+
+    router.push(newPath);
   }
 
   if (!data) return <Skeleton className="h-12 w-full" />;

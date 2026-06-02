@@ -15,7 +15,7 @@ export default function Home() {
 
     if (!activeProject.id) return;
 
-    router.replace(`/project/${activeProject.id}/reports`);
+    router.replace(`/app/project/${activeProject.id}/reports`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array - run once on mount
 
