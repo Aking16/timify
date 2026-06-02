@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-import MobileBottomNavigation from "@/components/navigation/mobile-bottom-navigation";
-
 export const metadata: Metadata = {
   title: "Timify",
   description: "Made with <3 by Aking",
@@ -31,7 +29,6 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <Providers>
           <main className="pb-20 md:pb-0">{children}</main>
-          <MobileBottomNavigation />
         </Providers>
       </body>
     </html>

@@ -1,38 +1,33 @@
-import { relations } from "drizzle-orm";
-import {
-  boolean,
-  index,
-  integer,
-  pgTable,
-  real,
-  text,
-  timestamp,
-  unique,
-} from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
-export const user = pgTable("user", {
+export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
+  emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
   image: text("image"),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" })
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .$onUpdateFn(() => new Date())
     .notNull(),
 });
 
-export const session = pgTable(
+export const session = sqliteTable(
   "session",
   {
     id: text("id").primaryKey(),
-    expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+    expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
     token: text("token").notNull().unique(),
-    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date" })
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .$onUpdateFn(() => new Date())
       .notNull(),
     ipAddress: text("ip_address"),
     userAgent: text("user_agent"),
@@ -40,10 +35,10 @@ export const session = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
   },
-  (table) => [index("session_userId_idx").on(table.userId)]
+  (table) => [uniqueIndex("session_userId_idx").on(table.userId)]
 );
 
-export const account = pgTable(
+export const account = sqliteTable(
   "account",
   {
     id: text("id").primaryKey(),
@@ -55,41 +50,45 @@ export const account = pgTable(
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
     idToken: text("id_token"),
-    accessTokenExpiresAt: timestamp("access_token_expires_at", {
-      mode: "date",
+    accessTokenExpiresAt: integer("access_token_expires_at", {
+      mode: "timestamp",
     }),
-    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
-      mode: "date",
+    refreshTokenExpiresAt: integer("refresh_token_expires_at", {
+      mode: "timestamp",
     }),
     scope: text("scope"),
     password: text("password"),
-    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date" })
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .$onUpdateFn(() => new Date())
       .notNull(),
   },
-  (table) => [index("account_userId_idx").on(table.userId)]
+  (table) => [uniqueIndex("account_userId_idx").on(table.userId)]
 );
 
-export const verification = pgTable(
+export const verification = sqliteTable(
   "verification",
   {
     id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
-    expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
-    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { mode: "date" })
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
+    expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .default(sql`(unixepoch())`)
+      .$onUpdateFn(() => new Date())
       .notNull(),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)]
+  (table) => [uniqueIndex("verification_identifier_idx").on(table.identifier)]
 );
 
 // Projects table
-export const projects = pgTable("projects", {
+export const projects = sqliteTable("projects", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -100,16 +99,18 @@ export const projects = pgTable("projects", {
   description: text("description"),
   color: text("color").default("#3b82f6"),
   hourlyRate: real("hourly_rate").default(0),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" })
-    .defaultNow()
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
 
 // Time entries table
-export const timeEntries = pgTable("time_entries", {
+export const timeEntries = sqliteTable("time_entries", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -121,21 +122,23 @@ export const timeEntries = pgTable("time_entries", {
   }),
   title: text("title"),
   description: text("description"),
-  startTime: timestamp("start_time", { mode: "date" }).defaultNow(),
-  endTime: timestamp("end_time", { mode: "date" }),
+  startTime: integer("start_time", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  endTime: integer("end_time", { mode: "timestamp" }),
   duration: integer("duration"), // in seconds, calculated field
-  isRunning: boolean("is_running").default(true),
-  billable: boolean("billable").default(false),
+  isRunning: integer("is_running", { mode: "boolean" }).default(true),
+  billable: integer("billable", { mode: "boolean" }).default(false),
   hourlyRate: real("hourly_rate"), // optional, can override project rate
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" })
-    .defaultNow()
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
 
 // Tags table (for categorization)
-export const tags = pgTable("tags", {
+export const tags = sqliteTable("tags", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -144,15 +147,17 @@ export const tags = pgTable("tags", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   color: text("color").default("#9ca3af"),
-  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date" })
-    .defaultNow()
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
 
 // Many-to-many: Time entries ↔ Tags
-export const timeEntryTags = pgTable(
+export const timeEntryTags = sqliteTable(
   "time_entry_tags",
   {
     id: text("id")
@@ -166,7 +171,7 @@ export const timeEntryTags = pgTable(
       .references(() => tags.id, { onDelete: "cascade" }),
   },
   (table) => ({
-    uniqueTimeEntryTag: unique().on(table.timeEntryId, table.tagId),
+    uniqueTimeEntryTag: uniqueIndex("unique_time_entry_tag").on(table.timeEntryId, table.tagId),
   })
 );
 
