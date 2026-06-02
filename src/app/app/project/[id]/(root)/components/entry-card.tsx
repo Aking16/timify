@@ -77,7 +77,7 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
               color={timeEntries.isRunning ? "green" : "red"}
             />
           </Button>
-          <EntryCardDialog {...timeEntries} />
+          <EntryCardDialog key={`entry-card-dialog-${timeEntries.updatedAt}`} {...timeEntries} />
         </CardAction>
       </CardHeader>
       <CardContent>

@@ -13,7 +13,10 @@ export default function Home() {
   useEffect(() => {
     const activeProject = getActiveProject();
 
-    if (!activeProject.id) return;
+    if (!activeProject.id) {
+      router.replace(`/app/projects`);
+      return;
+    }
 
     router.replace(`/app/project/${activeProject.id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps

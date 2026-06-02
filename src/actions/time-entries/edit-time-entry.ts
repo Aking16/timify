@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { revalidateTag } from "next/cache";
 
 const schema = z.object({
   id: z.string({
@@ -80,6 +81,7 @@ export async function editTimeEntry(
       .where(eq(timeEntries.id, id));
 
     revalidatePath("/project/");
+    revalidateTag("get-time-entries", "max");
 
     return {
       success: true,

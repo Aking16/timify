@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { revalidateTag } from "next/cache";
 
 export type DeleteTimeEntryState = {
   message?: string;
@@ -36,6 +37,7 @@ export async function deleteTimeEntry(id: string): Promise<DeleteTimeEntryState>
     await db.delete(timeEntries).where(eq(timeEntries.id, id));
 
     revalidatePath("/project/");
+    revalidateTag("get-time-entries", "max");
 
     return {
       success: true,

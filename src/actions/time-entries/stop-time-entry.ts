@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { timeEntries } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 
@@ -89,6 +89,7 @@ export async function stopTimeEntry(
       .where(eq(timeEntries.id, entry.id));
 
     revalidatePath("/project/");
+    revalidateTag("get-time-entries", "max");
 
     return {
       success: true,

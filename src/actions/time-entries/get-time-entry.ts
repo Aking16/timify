@@ -3,12 +3,16 @@
 import { db } from "@/db";
 import { tags, timeEntries, timeEntryTags } from "@/db/schema";
 import { eq, InferSelectModel } from "drizzle-orm";
+import { cacheTag } from "next/cache";
 
 export type TimeEntryWithTags = typeof timeEntries.$inferSelect & {
   tags: (typeof tags.$inferSelect)[];
 };
 
 export async function getTimeEntries(id: string) {
+   "use cache";
+  cacheTag("get-time-entries");
+
   const data = await db
     .select({
       timeEntry: timeEntries,
