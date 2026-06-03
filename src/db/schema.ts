@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
@@ -35,7 +35,7 @@ export const session = sqliteTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
   },
-  (table) => [uniqueIndex("session_userId_idx").on(table.userId)]
+  (table) => [index("session_userId_idx").on(table.userId)]
 );
 
 export const account = sqliteTable(
@@ -66,7 +66,7 @@ export const account = sqliteTable(
       .$onUpdateFn(() => new Date())
       .notNull(),
   },
-  (table) => [uniqueIndex("account_userId_idx").on(table.userId)]
+  (table) => [index("account_userId_idx").on(table.userId)]
 );
 
 export const verification = sqliteTable(
