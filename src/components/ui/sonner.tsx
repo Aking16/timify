@@ -41,8 +41,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
         classNames: {
           content: "font-iransanx",
           toast: "cn-toast",
-          error: "bg-destructive!",
-          success: "bg-green-800! text-green-100!",
+          error: "border-s-4! border-s-destructive! text-destructive!",
+          success: "border-s-4! border-s-success! text-success!",
         },
       }}
       {...props}
