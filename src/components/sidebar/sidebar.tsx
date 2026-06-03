@@ -21,6 +21,7 @@ import { ThemeSwitcher } from "../layout/theme-switcher";
 import { Skeleton } from "../ui/skeleton";
 import { ProjectSelector } from "./project-selector";
 import SidebarItem from "./sidebar-item";
+import SidebarProfile from "./sidebar-profile";
 import SidebarSecondaryItems from "./sidebar-secondary-items";
 import { StartTimer } from "./start-timer";
 
@@ -55,7 +56,10 @@ export async function AppSidebar() {
         ))}
         <SidebarSeparator />
         <SidebarSecondaryItems />
-        <ThemeSwitcher />
+        <div className="flex items-center gap-1 mt-auto mx-auto">
+          <SidebarProfile />
+          <ThemeSwitcher />
+        </div>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

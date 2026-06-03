@@ -129,6 +129,11 @@
     cursor: pointer;
   }
 
+  div:not([data-disabled]),
+  [data-slot="dropdown-menu-item"]:not([data-disabled]) {
+    cursor: pointer !important;
+  }
+
   input[type="color"] {
     @apply overflow-hidden rounded-md p-0;
   }

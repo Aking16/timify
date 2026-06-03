@@ -23,41 +23,17 @@ export function ThemeSwitcher() {
     setTheme(nextTheme);
   }
 
-  if (state === "collapsed") {
-    return (
-      <Button
-        variant="secondary"
-        className="mt-auto  rounded-none md:rounded-lg"
-        aria-label={`Current theme: ${resolvedTheme}. Click to cycle themes`}
-        onClick={cycleTheme}
-      >
-        <HugeiconsIcon icon={resolvedTheme === "dark" ? Moon02Icon : Sun02Icon} />
-      </Button>
-    );
-  }
+  if (state === "collapsed") return null;
 
   return (
     <Button
-      variant="secondary"
-      className="mt-auto justify-start h-fit py-1 rounded-none md:rounded-lg"
+      variant="outline"
+      className="rounded-none md:rounded-lg"
+      size="icon-lg"
       aria-label={`Current theme: ${resolvedTheme}. Click to cycle themes`}
       onClick={cycleTheme}
     >
-      <div className="hidden dark:flex gap-2 items-center [html[data-theme-mode=system]_&]:hidden">
-        <HugeiconsIcon icon={Moon02Icon} />
-        <div className="flex flex-col items-start">
-          <p className="text-sm text-muted-foreground">تم فعلی:</p>
-          <p className="text-xs">دارک تم</p>
-        </div>
-      </div>
-
-      <div className="inline-flex dark:hidden gap-2 items-center [html[data-theme-mode=system]_&]:hidden">
-        <HugeiconsIcon icon={Sun02Icon} />
-        <div className="flex flex-col items-start">
-          <p className="text-sm text-muted-foreground">تم فعلی:</p>
-          <p className="text-xs">لایت تم</p>
-        </div>
-      </div>
+      <HugeiconsIcon icon={resolvedTheme === "dark" ? Moon02Icon : Sun02Icon} />
     </Button>
   );
 }
