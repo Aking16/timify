@@ -6,7 +6,7 @@ import { TimeEntryWithTags } from "@/actions/time-entries/get-time-entry";
 import { stopTimeEntry } from "@/actions/time-entries/stop-time-entry";
 import { getActiveProject } from "@/data/get-active-project";
 import { tags } from "@/db/schema";
-import { PlayIcon, StopIcon, TagIcon } from "@hugeicons/core-free-icons";
+import { MoreVerticalIcon, PlayIcon, StopIcon, TagIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
@@ -20,10 +20,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { useRealtimeDuration } from "@/hooks/use-realtime-duration";
 
-import EntryCardDialog from "./entry-card-dialog";
+import EntryCardDelete from "./entry-card-delete";
+import EntryCardEdit from "./entry-card-edit";
 import TagsChips from "./tags-chips";
 
 interface EntryCardProps {
@@ -66,6 +74,7 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
           <Button
             variant="outline"
             size="sm"
+            title="توقف"
             disabled={isPending || !timeEntries.isRunning}
             onClick={handleStartClick}
             suppressHydrationWarning
@@ -77,7 +86,26 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
               color={timeEntries.isRunning ? "green" : "red"}
             />
           </Button>
-          <EntryCardDialog key={`entry-card-dialog-${timeEntries.updatedAt}`} {...timeEntries} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" title="مشاهده بیشتر">
+                <HugeiconsIcon icon={MoreVerticalIcon} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>عملیات</DropdownMenuLabel>
+                <EntryCardEdit
+                  key={`entry-card-dialog-${timeEntries.updatedAt}`}
+                  {...timeEntries}
+                />
+                <EntryCardDelete
+                  key={`entry-card-delete-dialog-${timeEntries.id}`}
+                  {...timeEntries}
+                />
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </CardAction>
       </CardHeader>
       <CardContent>

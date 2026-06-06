@@ -1,9 +1,8 @@
 import { useActionState, useState } from "react";
 
-import { deleteTimeEntry } from "@/actions/time-entries/delete-time-entry";
 import { editTimeEntry } from "@/actions/time-entries/edit-time-entry";
 import { timeEntries } from "@/db/schema";
-import { ChevronDown, Edit02Icon, Trash } from "@hugeicons/core-free-icons";
+import { ChevronDown, Edit02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { format } from "date-fns-jalali";
 import { faIR } from "date-fns-jalali/locale";
@@ -24,7 +23,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export default function EntryCardDialog({
+export default function EntryCardEdit({
   id,
   title,
   description,
@@ -81,8 +80,9 @@ export default function EntryCardDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon-sm">
+        <Button variant="ghost" className="w-full justify-start">
           <HugeiconsIcon icon={Edit02Icon} />
+          ویرایش
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -206,18 +206,6 @@ export default function EntryCardDialog({
         <StatusMessage status={state?.success ? "success" : "error"} message={state?.message} />
 
         <DialogFooter>
-          <Button
-            type="button"
-            variant="destructive"
-            className="me-auto"
-            onClick={async () => {
-              await deleteTimeEntry(id);
-              setOpen(false);
-            }}
-          >
-            <HugeiconsIcon icon={Trash} />
-            حذف
-          </Button>
           <Button
             type="button"
             variant="outline"
