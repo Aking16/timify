@@ -175,6 +175,26 @@ export const timeEntryTags = sqliteTable(
   })
 );
 
+// Countdowns table
+export const countdowns = sqliteTable("countdowns", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  title: text("title").notNull().default(""),
+  duration: integer("duration").notNull(), // total target duration in seconds
+  startedAt: integer("started_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`(unixepoch())`)
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
 // Relations for TypeScript type safety
 export const usersRelations = relations(user, ({ many }) => ({
   projects: many(projects),
@@ -182,6 +202,7 @@ export const usersRelations = relations(user, ({ many }) => ({
   tags: many(tags),
   sessions: many(session),
   accounts: many(account),
+  countdowns: many(countdowns),
 }));
 
 export const projectsRelations = relations(projects, ({ one, many }) => ({
@@ -223,4 +244,8 @@ export const accountRelations = relations(account, ({ one }) => ({
     fields: [account.userId],
     references: [user.id],
   }),
+}));
+
+export const countdownsRelations = relations(countdowns, ({ one }) => ({
+  user: one(user, { fields: [countdowns.userId], references: [user.id] }),
 }));

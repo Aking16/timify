@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { timeDisplay } from "./libs/time-display";
+import { timeDisplay } from "../../../../lib/time-display";
 
 export default function SavedTimeTable({ times }: { times: number[] }) {
   if (times.length === 0) return null;

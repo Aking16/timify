@@ -8,12 +8,9 @@ import { useInterval } from "ahooks";
 
 import { Button } from "@/components/ui/button";
 
-import { timeDisplay } from "./components/libs/time-display";
-import {
-  deleteTimeStorage,
-  getTimeStorage,
-  saveTimeStorage,
-} from "./components/libs/time-local-storage";
+import { timeDisplay } from "@/lib/time-display";
+import { deleteTimeStorage, getTimeStorage, saveTimeStorage } from "@/lib/time-local-storage";
+
 import SavedTimeTable from "./components/saved-time-table";
 
 export default function TimerPage() {
