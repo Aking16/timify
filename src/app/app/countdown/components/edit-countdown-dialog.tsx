@@ -7,13 +7,14 @@ import { updateCountdown } from "@/actions/countdowns/update-countdown";
 import { countdowns } from "@/db/schema";
 import { Edit02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { InferSelectModel } from "drizzle-orm";
 
 import StatusMessage from "@/components/cards/status-message";
+import TimePicker from "@/components/custom-ui/time-picker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -22,16 +23,11 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-interface EditCountdownDialogProps extends InferSelectModel<typeof countdowns> {
-  isRunning: boolean;
-}
-
 export default function EditCountdownDialog({
   id,
   title,
   duration,
-  isRunning,
-}: EditCountdownDialogProps) {
+}: typeof countdowns.$inferSelect) {
   const [isOpen, setOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(updateCountdown, null);
 
@@ -40,8 +36,6 @@ export default function EditCountdownDialog({
       setOpen(false);
     }
   }, [state]);
-
-  const isDisabled = isRunning || isPending;
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -54,12 +48,8 @@ export default function EditCountdownDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>ویرایش شمارش معکوس</DialogTitle>
+          <DialogDescription className="sr-only">ویرایش شمارش معکوس</DialogDescription>
         </DialogHeader>
-        {isRunning && (
-          <p className="text-sm text-destructive">
-            نمی‌توان شمارش معکوس در حال اجرا را ویرایش کرد. ابتدا آن را متوقف کنید.
-          </p>
-        )}
         <form id="edit-countdown-form" action={formAction}>
           <input type="hidden" name="id" value={id} />
           <FieldGroup>
@@ -70,19 +60,20 @@ export default function EditCountdownDialog({
                 name="title"
                 defaultValue={title}
                 maxLength={64}
-                disabled={isDisabled}
+                disabled={isPending}
               />
             </Field>
             <Field>
               <FieldLabel htmlFor="duration">مدت (ثانیه)</FieldLabel>
-              <Input
+              <TimePicker
                 id="duration"
                 name="duration"
                 type="number"
                 min={1}
                 max={86400}
+                className="justify-center"
                 defaultValue={duration}
-                disabled={isDisabled}
+                disabled={isPending}
                 required
               />
             </Field>
@@ -93,7 +84,7 @@ export default function EditCountdownDialog({
           <Button variant="outline" type="button" onClick={() => setOpen(false)}>
             لغو
           </Button>
-          <Button type="submit" form="edit-countdown-form" disabled={isDisabled}>
+          <Button type="submit" form="edit-countdown-form" disabled={isPending}>
             {isPending ? "در حال ویرایش..." : "ویرایش"}
           </Button>
         </DialogFooter>

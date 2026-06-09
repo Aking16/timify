@@ -8,10 +8,12 @@ import { AddIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import StatusMessage from "@/components/cards/status-message";
+import TimePicker from "@/components/custom-ui/time-picker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -41,6 +43,7 @@ export default function CreateCountdownDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>شمارش معکوس جدید</DialogTitle>
+          <DialogDescription className="sr-only">شمارش معکوس جدید</DialogDescription>
         </DialogHeader>
         <form id="create-countdown-form" action={formAction}>
           <FieldGroup>
@@ -50,12 +53,13 @@ export default function CreateCountdownDialog() {
             </Field>
             <Field>
               <FieldLabel htmlFor="duration">مدت (ثانیه)</FieldLabel>
-              <Input
+              <TimePicker
                 id="duration"
                 name="duration"
                 type="number"
                 min={1}
                 max={86400}
+                className="justify-center"
                 required
                 placeholder="مثلاً ۳۶۰۰"
               />
