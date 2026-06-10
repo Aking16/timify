@@ -21,7 +21,7 @@ export const sidebarNavItems = [
     label: "پروژه‌ها",
     items: [
       { title: "همه پروژه‌ها", icon: FolderIcon, href: "/app/projects", badge: null },
-      { title: "تقویم", icon: CalendarIcon, href: "#", badge: null },
+      { title: "تقویم", icon: CalendarIcon, href: "/app/calendar", badge: null },
       { title: "گزارش‌ها", icon: Analytics01Icon, href: "/app/reports", badge: null },
     ],
   },
