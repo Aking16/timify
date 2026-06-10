@@ -98,7 +98,7 @@ export default function CountdownCard({ countdown }: CountdownCardProps) {
             <DropdownMenuContent>
               <DropdownMenuGroup>
                 <DropdownMenuLabel>عملیات</DropdownMenuLabel>
-                <EditCountdownDialog {...countdown} isRunning={isRunning} />
+                <EditCountdownDialog {...countdown} />
                 <DeleteCountdownDialog {...countdown} />
               </DropdownMenuGroup>
             </DropdownMenuContent>
