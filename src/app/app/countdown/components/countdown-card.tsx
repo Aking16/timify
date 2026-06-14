@@ -28,6 +28,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { timeDisplay } from "@/lib/time-display";
+import {
+  deleteRunningCountdownStorage,
+  saveRunningCountdownStorage,
+} from "@/lib/time-local-storage";
 
 import DeleteCountdownDialog from "./delete-countdown-dialog";
 import EditCountdownDialog from "./edit-countdown-dialog";
@@ -62,21 +66,32 @@ export default function CountdownCard({ countdown }: CountdownCardProps) {
 
   function handleStart() {
     setIsRunning(true);
-    const formData = new FormData();
-    formData.set("id", countdown.id);
+    saveRunningCountdownStorage({
+      isRunning: true,
+      id: countdown.id,
+      title: countdown.title ?? "شمارش معکوس",
+      duration: countdown.duration,
+      remaining,
+      startedAt: Date.now(),
+    });
   }
 
   function handlePause() {
     setIsRunning(false);
-    const formData = new FormData();
-    formData.set("id", countdown.id);
+    saveRunningCountdownStorage({
+      isRunning: false,
+      id: countdown.id,
+      title: countdown.title ?? "شمارش معکوس",
+      duration: countdown.duration,
+      remaining,
+      startedAt: Date.now(),
+    });
   }
 
   function handleReset() {
     setIsRunning(false);
     setRemaining(countdown.duration);
-    const formData = new FormData();
-    formData.set("id", countdown.id);
+    deleteRunningCountdownStorage();
   }
 
   const isCompleted = remaining === 0;

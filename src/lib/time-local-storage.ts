@@ -51,3 +51,38 @@ export function deleteRunningTimerStorage() {
 
   window.dispatchEvent(new Event("runningTimerUpdated"));
 }
+
+export type RunningCountdownType = {
+  isRunning: boolean;
+  id: string;
+  title: string;
+  duration: number;
+  remaining: number;
+  startedAt: number;
+};
+
+export function getRunningCountdownStorage(): RunningCountdownType | null {
+  if (typeof window === "undefined") return null;
+
+  const data = localStorage.getItem("running-countdown");
+
+  if (!data) return null;
+
+  return JSON.parse(data);
+}
+
+export function saveRunningCountdownStorage(data: RunningCountdownType) {
+  if (typeof window === "undefined") return null;
+
+  localStorage.setItem("running-countdown", JSON.stringify(data));
+
+  window.dispatchEvent(new Event("runningCountdownUpdated"));
+}
+
+export function deleteRunningCountdownStorage() {
+  if (typeof window === "undefined") return null;
+
+  localStorage.removeItem("running-countdown");
+
+  window.dispatchEvent(new Event("runningCountdownUpdated"));
+}

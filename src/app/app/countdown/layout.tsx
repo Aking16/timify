@@ -1,3 +1,4 @@
+import CountdownPopup from "@/components/layout/countdown-popup";
 import TodayDate from "@/components/layout/today-date";
 import { SidebarLayout } from "@/components/sidebar/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -17,6 +18,7 @@ export default function Layout({
         <TodayDate />
       </header>
       <main className="p-4">{children}</main>
+      <CountdownPopup />
     </SidebarLayout>
   );
 }
