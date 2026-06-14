@@ -1,3 +1,4 @@
+import TimerPopup from "@/components/layout/timer-popup";
 import MobileBottomNavigation from "@/components/navigation/mobile-bottom-navigation";
 
 export default function RootLayout({
@@ -9,6 +10,7 @@ export default function RootLayout({
     <div>
       {children}
       <MobileBottomNavigation />
+      <TimerPopup />
     </div>
   );
 }
