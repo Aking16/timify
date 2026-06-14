@@ -1,4 +1,4 @@
-import { LayoutEntry, formatEntryDuration, getEntryDuration } from "./utils";
+import { formatEntryDuration, getEntryDuration, LayoutEntry } from "./utils";
 
 interface EntryBlockProps {
   layout: LayoutEntry;
@@ -7,7 +7,7 @@ interface EntryBlockProps {
 export default function EntryBlock({ layout }: EntryBlockProps) {
   const entry = layout.entry;
   const duration = getEntryDuration(entry);
-  const projectColor = entry.project?.color ?? "#3b82f6";
+  const projectColor = entry.project?.color ?? "#006045";
 
   return (
     <div

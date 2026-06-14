@@ -97,7 +97,7 @@ export const projects = sqliteTable("projects", {
     .references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
-  color: text("color").default("#3b82f6"),
+  color: text("color").default("#006045"),
   hourlyRate: real("hourly_rate").default(0),
   isActive: integer("is_active", { mode: "boolean" }).default(true),
   createdAt: integer("created_at", { mode: "timestamp" })
