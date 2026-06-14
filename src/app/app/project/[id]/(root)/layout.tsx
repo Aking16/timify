@@ -1,3 +1,4 @@
+import TodayDate from "@/components/layout/today-date";
 import { SidebarLayout } from "@/components/sidebar/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -13,6 +14,7 @@ export default function Layout({
           <SidebarTrigger />
           <span>داشبورد</span>
         </div>
+        <TodayDate />
       </header>
       <main className="p-4">{children}</main>
     </SidebarLayout>

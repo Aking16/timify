@@ -6,11 +6,14 @@ import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 
+import { useMounted } from "@/hooks/use-mounted";
+
 import { useSidebar } from "../ui/sidebar";
 
 const THEME_CYCLE = ["light", "dark"] as const;
 
 export function ThemeSwitcher() {
+  const isMounted = useMounted();
   const { state } = useSidebar();
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -23,6 +26,7 @@ export function ThemeSwitcher() {
     setTheme(nextTheme);
   }
 
+  if (!isMounted) return null;
   if (state === "collapsed") return null;
 
   return (

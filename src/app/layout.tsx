@@ -26,7 +26,7 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", iranSansX.variable, "font-iransanx")}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <Providers>
           <main className="pb-20 md:pb-0">{children}</main>
         </Providers>
