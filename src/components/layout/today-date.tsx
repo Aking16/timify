@@ -22,7 +22,7 @@ export default function TodayDate() {
 
   return (
     <div className="flex items-center gap-2">
-      <Clock className="size-4 text-primary" animateOnView loop />
+      <Clock className="size-5 text-primary" animateOnView loop />
       <p>{format(today, "E MMMM d، hh:mm B")}</p>
     </div>
   );
