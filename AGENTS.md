@@ -4,50 +4,66 @@ Lightweight time tracker (Toggl-style). Persian-first, offline-capable, SQLite-b
 
 ## Stack
 
-- Next.js 16.2.6 + React 19 (App Router), React Compiler enabled
+- Next.js 16.2.6 + React 19 (App Router), **React Compiler enabled** (`next.config.ts`)
 - Tailwind CSS v4 (`@tailwindcss/postcss`, no `tailwind.config.ts`; `@theme inline` in `globals.css`)
-- shadcn/ui v4 `radix-nova`, Hugeicons icon library
+- shadcn/ui v4 `radix-nova` (56 primitives in `src/components/ui/`), Hugeicons icon library
 - Drizzle ORM + `@libsql/client` (SQLite)
-- `better-auth` for auth (email/password, Persian locale)
-- **Testing**: Vitest (unit, 213 tests) + Playwright (E2E, 42 tests)
+- `better-auth` for auth (email/password, Persian locale; `useSecureCookies: false` for local dev)
+- **Testing**: Vitest (unit, `__tests__/tests/`) + Playwright (E2E, `__tests__/e2e/`)
 
 ## Key commands
 
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Dev server |
-| `npm run build` | Build + typecheck |
-| `npm run lint` | ESLint (flat config) |
+| `npm run build` | Build + typecheck (next build) |
+| `npm run lint` | ESLint (flat config: `eslint.config.mjs`) |
 | `npm test` | Unit tests (Vitest, no dev server needed) |
 | `npm run test:watch` | Vitest watch mode |
-| `npm run test:e2e` | E2E (Playwright, requires running dev server) |
-| `npx drizzle-kit push` | Push schema to SQLite |
+| `npm run test:e2e` | E2E (Playwright, requires dev server running) |
+| `npx drizzle-kit push` | Push Drizzle schema to SQLite |
 | `npx drizzle-kit studio` | Drizzle Studio GUI |
+
+## Setup
+
+`.env*` is gitignored. Create `.env` manually:
+
+```
+DB_FILE_NAME=file:./src/db/local.db
+BETTER_AUTH_SECRET=<any-random-string>
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+The `DATABASE_URL` env var is defined but unused — SQLite (`DB_FILE_NAME`) is the source of truth.
 
 ## Project structure
 
 ```
 src/
-├── actions/               # Server actions by domain (projects, tags, time-entries, time-entry-tags, reports, countdowns)
+├── actions/               # Server actions by domain (projects, tags, time-entries, time-entry-tags, reports, countdowns, auth)
 ├── app/
 │   ├── (root)/            # Public landing page
 │   ├── app/               # Authenticated pages (dashboard, projects, project/[id], tags, reports, timer, countdown, calendar)
 │   ├── api/auth/          # better-auth API routes
 │   └── auth/              # Login/Register (?tab=register)
 ├── components/
+│   ├── animate-ui/        # Animated UI primitives & icons
 │   ├── cards/             # StatusMessage (legacy — prefer toast() from sonner instead)
 │   ├── charts/            # Recharts wrappers
+│   ├── custom-ui/         # Custom primitives (pulsating-loader, time-picker)
 │   ├── sidebar/           # Desktop sidebar (project selector, profile, StartTimer, theme)
 │   ├── navigation/        # Mobile bottom navigation
-│   └── ui/                # shadcn/ui primitives (60+ components installed)
+│   └── ui/                # shadcn/ui primitives (56 installed)
 ├── db/                    # Drizzle schema (schema.ts), client singleton (index.ts), local.db (committed)
 ├── lib/                   # auth setup, cn(), calculate-duration, time-display, localize-price, persian-number-to-words
-├── hooks/                 # use-mobile, use-click-outside, use-realtime-duration
+├── hooks/                 # use-mobile, use-click-outside, use-realtime-duration, use-mounted, use-is-in-view
 ├── context/providers.tsx  # DirectionProvider(RTL), ThemeProvider, TooltipProvider, Toaster, NextTopLoader
 ├── data/                  # navigation-data.ts, get-active-project
-├── constants/             # routes.ts, placeholder-image.ts
+├── constants/             # routes.ts, fonts.ts, placeholder-image.ts
 └── proxy.ts               # Auth middleware (matcher: ["/app:path*"])
 ```
+
+Vitest tests live under `__tests__/tests/` (setup at `__tests__/tests/setup.ts`), Playwright E2E under `__tests__/e2e/`.
 
 ## Architecture
 
@@ -89,7 +105,7 @@ src/
 - `useActionState` returns `{ message?, success? } | null`
 - Close dialog on `state.success` via `useEffect`
 - Show errors inline: `<StatusMessage>` (legacy, being phased out) or `toast.error()` from `sonner`
-- Form validation via `zod` on the server action
+- Form validation via `zod` (v4, `z.safeParse()`) on the server action
 
 ### Calendar module
 Broken into focused components at `src/app/app/calendar/components/`:
@@ -110,7 +126,8 @@ Broken into focused components at `src/app/app/calendar/components/`:
 - **Icons** — `@hugeicons/core-free-icons` with `@hugeicons/react` wrapper; `data-icon="inline-start"` in buttons; no sizing on icons inside components
 - **shadcn** — `npx shadcn@latest add <component>`; MCP server in `opencode.json`
 - **Unused vars** — Prefix with `_` (ESLint enforces via `argsIgnorePattern: "^_"`)
-- **Primary keys** — `crypto.randomUUID()` in Drizzle schema `$defaultFn`
+- **Primary keys** — `crypto.randomUUID()` in Drizzle schema `$defaultFn` (app tables only; better-auth tables use their own)
 - **success/error messages** — Prefer `toast()` from `sonner` over inline `<StatusMessage>`
 - **local.db** — Committed to git (schema sync across environments)
-- **zod** — All server actions validate form data with `z.safeParse()`
+- **zod** — All server actions validate form data with `z.safeParse()` in Zod v4
+- **`<form action>` layout** — `useActionState` takes `(serverAction, initialState)` and returns `{ success: boolean, message: string } | null`. Check `success` in `useEffect` to close dialogs.

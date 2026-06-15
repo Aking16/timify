@@ -1,26 +1,19 @@
-"use client";
-
-import { useEffect } from "react";
-
-import { getActiveProject } from "@/data/get-active-project";
-import { useRouter } from "nextjs-toploader/app";
-
-import PageLoading from "@/components/shared/page-loading";
+import CtaSection from "@/app/(root)/components/cta-section";
+import FeaturesSection from "@/app/(root)/components/features-section";
+import HeroSection from "@/app/(root)/components/hero-section";
+import HowItWorksSection from "@/app/(root)/components/how-it-works-section";
+import LandingFooter from "@/app/(root)/components/landing-footer";
+import LandingNav from "@/app/(root)/components/landing-nav";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const activeProject = getActiveProject();
-
-    if (!activeProject.id) {
-      router.replace(`/app/projects`);
-      return;
-    }
-
-    router.replace(`/app/project/${activeProject.id}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array - run once on mount
-
-  return <PageLoading />;
+  return (
+    <div className="relative flex flex-col overflow-hidden">
+      <LandingNav />
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <CtaSection />
+      <LandingFooter />
+    </div>
+  );
 }
