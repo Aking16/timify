@@ -92,7 +92,7 @@ test.describe("Projects CRUD", () => {
   });
 
   test.describe("Delete project", () => {
-    test.skip("should delete a project", async ({ page }) => {
+    test.skip("should delete a project", async ({ page: _page }) => {
       // Skipped: The deleteProject server action calls:
       //   revalidatePath("/projects/") — WRONG path (should be /app/projects)
       //   revalidateTag("get-projects", "max") — extra "max" arg may cause issues

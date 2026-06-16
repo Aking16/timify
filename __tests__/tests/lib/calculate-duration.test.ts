@@ -47,7 +47,6 @@ describe("formatDuration", () => {
 
 describe("calculateDuration", () => {
   const mockNow = new Date("2025-01-15T10:00:00Z");
-  const baseTime = new Date("2025-01-15T09:00:00Z"); // 1 hour before mockNow
 
   afterEach(() => {
     vi.useRealTimers();

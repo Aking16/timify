@@ -82,7 +82,7 @@ test.describe("Tag Management", () => {
   });
 
   test.describe("Delete tag", () => {
-    test.skip("should delete a tag", async ({ page }) => {
+    test.skip("should delete a tag", async ({ page: _page }) => {
       // Skipped: The deleteTag server action calls:
       //   revalidatePath("/tags/") — WRONG path (should be /app/tags)
       //   revalidateTag("get-tags", "max") — extra "max" arg may cause issues

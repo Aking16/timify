@@ -115,6 +115,7 @@ test.describe("Time Entry Operations", () => {
       const editBtn = entryTitle.locator("..").getByRole("button").nth(1);
       await editBtn.waitFor({ state: "visible", timeout: 5000 });
       await editBtn.click();
+      await page.getByRole("button", { name: "ویرایش" }).first().click();
 
       await page.waitForSelector('h2:has-text("ویرایش تسک")', { timeout: 5000 });
 
