@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+import { authClient } from "@/lib/auth-client";
+
 export default function LandingNav() {
+  const session = authClient.useSession();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg ">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
@@ -26,12 +32,20 @@ export default function LandingNav() {
           تایمیفای
         </Link>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/auth">ورود</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/auth?tab=register">ثبت‌نام</Link>
-          </Button>
+          {session.data?.user ? (
+            <Button asChild>
+              <Link href="/app">داشبورد</Link>
+            </Button>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/auth">ورود</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/auth?tab=register">ثبت‌نام</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

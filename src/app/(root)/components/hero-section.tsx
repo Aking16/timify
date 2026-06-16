@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import AnimatedCircles from "./animated-circles";
+import AnimatedCircles from "../../../components/shared/animated-circles";
 
 const m = motion;
 
