@@ -3,12 +3,11 @@
 import { db } from "@/db";
 import { timeEntries } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
-import { revalidateTag } from "next/cache";
 
 const schema = z.object({
   projectID: z.string(),
@@ -80,7 +79,6 @@ export async function createTimeEntry(
       userId: session.user.id,
       projectId: projectID,
       title: "تسک جدید",
-      description: "تسک جدید",
     });
 
     revalidatePath("/project/");

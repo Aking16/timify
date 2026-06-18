@@ -3,6 +3,8 @@
 import { Dispatch, SetStateAction, useActionState, useState } from "react";
 
 import { createProject } from "@/actions/projects/create-project";
+import { PlusSignCircleIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { numberToPersianWords } from "@/lib/persian-number-to-words";
 
@@ -14,6 +16,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
@@ -21,15 +24,28 @@ import { Input } from "../ui/input";
 interface CreateProjectDialogProps {
   isOpen?: boolean;
   setOpen?: Dispatch<SetStateAction<boolean>>;
+  hasTrigger?: boolean;
 }
 
-export default function CreateProjectDialog({ isOpen, setOpen }: CreateProjectDialogProps) {
+export default function CreateProjectDialog({
+  isOpen,
+  setOpen,
+  hasTrigger = false,
+}: CreateProjectDialogProps) {
   const [hourlyRate, setHourlyRate] = useState(0);
 
   const [state, formAction, isPending] = useActionState(createProject, null);
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
+      {hasTrigger && (
+        <DialogTrigger>
+          <Button>
+            <HugeiconsIcon icon={PlusSignCircleIcon} data-icon="inline-start" />
+            <span>افزودن پروژه</span>
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>ساخت پروژه جدید</DialogTitle>
@@ -84,10 +100,10 @@ export default function CreateProjectDialog({ isOpen, setOpen }: CreateProjectDi
               setOpen?.(false);
             }}
           >
-            Cancel
+            لغو
           </Button>
           <Button type="submit" form="new-project-form" disabled={isPending}>
-            {isPending ? "Creating..." : "Create Project"}
+            {isPending ? "در حال ساختن..." : "ساخت پروژه"}
           </Button>
         </DialogFooter>
       </DialogContent>

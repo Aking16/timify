@@ -42,6 +42,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           content: "font-iransanx",
           toast: "cn-toast",
           error: "border-s-4! border-s-destructive! text-destructive!",
+          warning: "border-s-4! border-s-yellow-500! text-yellow-500!",
           success: "border-s-4! border-s-success! text-success!",
         },
       }}

@@ -74,10 +74,11 @@ export default function EntryCardEdit({
   }
 
   const handleSubmit = (formData: FormData) => {
-    // Set the combined datetime values
+    formData.set("id", id);
     formData.set("startTime", getCombinedStartDateTime());
     formData.set("endTime", getCombinedEndDateTime());
     formData.set("description", descriptionMd);
+
     formAction(formData);
   };
 
@@ -89,14 +90,12 @@ export default function EntryCardEdit({
           ویرایش
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[90svw]! lg:max-w-[60svw]!">
         <DialogHeader>
           <DialogTitle>ویرایش تسک</DialogTitle>
           <DialogDescription>تسک خود را ویرایش کن</DialogDescription>
         </DialogHeader>
         <form id="edit-task-form" className="space-y-4 py-4" action={handleSubmit}>
-          <input type="hidden" name="id" value={id} />
-
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="title">نام تسک</FieldLabel>

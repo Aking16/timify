@@ -52,14 +52,14 @@ export function ProjectSelector({ data }: { data: (typeof projects.$inferSelect)
     setActiveProject({ id, name });
 
     // Check if we're on a project route (matches /project/:id/* pattern)
-    const projectRoutePattern = /^\/project\/([^\/]+)(\/.*)?$/;
+    const projectRoutePattern = /^\/app\/project\/([^\/]+)(\/.*)?$/;
     const match = pathname.match(projectRoutePattern);
 
     if (!match) return;
 
     // Replace the project ID while keeping the rest of the path
     const restOfPath = match[2] ?? "";
-    const newPath = `/project/${id}${restOfPath}`;
+    const newPath = `/app/project/${id}${restOfPath}`;
 
     router.push(newPath);
   }

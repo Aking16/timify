@@ -1,7 +1,9 @@
 .ProseMirror {
   padding: 0.5rem 0.75rem;
-  min-height: 120px;
+  min-height: 6rem;
+  max-height: 8rem;
   outline: none;
+  overflow-y: auto;
 
   p {
     margin: 0;
