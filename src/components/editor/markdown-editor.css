@@ -1,0 +1,52 @@
+.ProseMirror {
+  padding: 0.5rem 0.75rem;
+  min-height: 120px;
+  outline: none;
+
+  p {
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+  }
+
+  ul {
+    list-style: disc;
+    padding-inline-start: 1.5rem;
+  }
+
+  ol {
+    list-style: decimal;
+    padding-inline-start: 1.5rem;
+  }
+
+  li {
+    line-height: 1.7;
+  }
+
+  a {
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  p.is-editor-empty:first-child::before {
+    color: var(--muted-foreground);
+    content: attr(data-placeholder);
+    float: inline-start;
+    height: 0;
+    pointer-events: none;
+  }
+}

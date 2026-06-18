@@ -8,6 +8,7 @@ import { format } from "date-fns-jalali";
 import { faIR } from "date-fns-jalali/locale";
 
 import StatusMessage from "@/components/cards/status-message";
+import MarkdownEditor from "@/components/editor/markdown-editor";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -44,6 +45,8 @@ export default function EntryCardEdit({
   );
   const [endTimeValue, setEndTimeValue] = useState<string>(endTime ? format(endTime, "HH:mm") : "");
 
+  const [descriptionMd, setDescriptionMd] = useState(description ?? "");
+
   const [state, formAction, isPending] = useActionState(editTimeEntry, null);
 
   // Combine date and time for startTime
@@ -74,6 +77,7 @@ export default function EntryCardEdit({
     // Set the combined datetime values
     formData.set("startTime", getCombinedStartDateTime());
     formData.set("endTime", getCombinedEndDateTime());
+    formData.set("description", descriptionMd);
     formAction(formData);
   };
 
@@ -109,13 +113,10 @@ export default function EntryCardEdit({
             </Field>
             <Field>
               <FieldLabel htmlFor="description">توضیحات</FieldLabel>
-              <Input
-                id="description"
-                name="description"
-                placeholder="توضیحات تسک خود را وارد کنید"
-                defaultValue={description!}
-                required
-                minLength={4}
+              <MarkdownEditor
+                value={descriptionMd}
+                onChange={setDescriptionMd}
+                placeholder="توضیحات تسک خود را وارد کنید..."
               />
             </Field>
           </FieldGroup>

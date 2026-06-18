@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useMemo } from "react";
 
 import { TimeEntryWithTags } from "@/actions/time-entries/get-time-entry";
 import { stopTimeEntry } from "@/actions/time-entries/stop-time-entry";
@@ -8,6 +8,7 @@ import { getActiveProject } from "@/data/get-active-project";
 import { tags } from "@/db/schema";
 import { MoreVerticalIcon, PlayIcon, StopIcon, TagIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { marked } from "marked";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,6 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -46,6 +46,15 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
     timeEntries.duration
   );
 
+  const descriptionHtml = useMemo(() => {
+    if (!timeEntries.description) return "";
+    try {
+      return marked(timeEntries.description, { async: false });
+    } catch {
+      return timeEntries.description;
+    }
+  }, [timeEntries.description]);
+
   const [_state, formAction, isPending] = useActionState(stopTimeEntry, null);
 
   async function handleStartClick() {
@@ -69,7 +78,6 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
     <Card>
       <CardHeader>
         <CardTitle>{timeEntries.title}</CardTitle>
-        <CardDescription>{timeEntries.description}</CardDescription>
         <CardAction className="flex items-center gap-1">
           <Button
             variant="outline"
@@ -109,7 +117,14 @@ export default function EntryCard({ timeEntries, tags }: EntryCardProps) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>{timeEntries.description}</p>
+        {descriptionHtml ? (
+          <div
+            className="prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:ps-4 [&_ol]:list-decimal [&_ol]:ps-4 [&_li]:leading-relaxed [&_a]:text-primary [&_a]:underline"
+            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+          />
+        ) : (
+          <p className="text-muted-foreground text-sm">بدون توضیحات</p>
+        )}
       </CardContent>
       <CardFooter className="block space-y-2 mt-auto">
         <p className="flex items-center gap-1">

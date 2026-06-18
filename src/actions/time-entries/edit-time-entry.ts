@@ -20,11 +20,7 @@ const schema = z.object({
     })
     .min(4, "عنوان باید حداقل ۴ کاراکتر باشد")
     .max(32, "عنوان باید حداکثر ۳۲ کاراکتر باشد"),
-  description: z
-    .string({
-      error: "توضیحات الزامی است",
-    })
-    .min(4, "توضیحات باید حداقل ۴ کاراکتر باشد"),
+  description: z.string().optional().default(""),
   startTime: z.string({
     error: "زمان شروع الزامی است",
   }),
